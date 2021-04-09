@@ -1,19 +1,40 @@
 <script>
   import { CDService } from "./cd.service.js";
+  import { VisService } from "./vis.service.js";
   import APIOptions from "./APIOptions.svelte";
   import hljs from "highlight.js/lib/core";
   import json from "highlight.js/lib/languages/json";
   import "highlight.js/styles/github.css";
   import * as params from "./urlparams";
-  console.log(params);
   hljs.registerLanguage("json", json);
-  let service = new CDService(params);
+  const cdService = new CDService(params);
+  const visService = new VisService(params);
   let error = false;
   let content = {};
+  let load;
+  let useVisConnection = false;
+
+  visService.connect().then((e)=>{if(e===true){
+    useVisConnection = true;
+  }});
+
+  setTimeout(()=>{
+    if(!useVisConnection){
+      load = loadData();
+    }
+  }, 100);
+
+  $: if(useVisConnection) {
+    load = loadData();
+    visService.listenForChanges((change)=>{
+      content = change;
+    })
+  }
+
   const loadData = async () => {
     error = false;
     try {
-      content = await service.fetchContent();
+      content = useVisConnection ? await visService.fetchContent() : await cdService.fetchContent();
     } catch (e) {
       try {
         content = JSON.parse(e.message);
@@ -28,7 +49,6 @@
       error = true;
     }
   };
-  let load = loadData();
 </script>
 
 <style>
@@ -65,7 +85,8 @@
       depth = {params.depth}
       store = {params.store}
       on:change={(e) => {
-        service.setParams(e.detail);
+        cdService.setParams(e.detail);
+        visService.setParams(e.detail);
         loadData();
       }} />
   </div>

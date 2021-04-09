@@ -50,6 +50,9 @@ export class CDService {
   }
 
   async fetchContent() {
+    if(this.id==='{{content.sys.id}}' || this.id!==undefined) {
+      throw(new Error('no content item'));
+    }
     let content = await wretch(this.constructFullPath(this.id)).get().json();
     return content;
   }
