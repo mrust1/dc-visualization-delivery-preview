@@ -17,7 +17,8 @@
     "rollup-plugin-terser": "^5.1.2",
     "svelte": "^3.0.0",
     "wretch": "^1.7.2",
-    "dc-visualization-sdk": "git@github.com:amplience/dc-visualization-sdk.git"
+    "dc-visualization-sdk": "git@github.com:amplience/dc-visualization-sdk.git",
+    "diff": "^5.0.0"
   },
   "dependencies": {
     "sirv-cli": "^0.4.4"

@@ -2,6 +2,7 @@
   import { CDService } from "./cd.service.js";
   import { VisService } from "./vis.service.js";
   import Settings from "./Settings.svelte";
+  import Diff from "./Diff.svelte";
   import MenuBar from "./MenuBar.svelte";
   import hljs from "highlight.js/lib/core";
   import json from "highlight.js/lib/languages/json";
@@ -15,6 +16,7 @@
   let error = false;
   let content = {};
   let load;
+  let json2 = {};
   let useVisConnection = false;
 
   visService.connect().then((e)=>{if(e===true){
@@ -34,15 +36,29 @@
     })
   }
 
-  const loadData = async () => {
+  $: if(selected === 'Live') {
+    load = loadData(true);
+  }
+  $: if(selected === 'Staged') {
+    load = loadData();
+  }
+  $: if(selected === 'Diff') {
+    load = loadData();
+    loadData(true).then((val) => {json2 = val});
+  }
+  const loadData = async (live) => {
     error = false;
+    let val;
     try {
-      content = useVisConnection ? await visService.fetchContent() : await cdService.fetchStagedContent();
+      val = useVisConnection && !live ? await visService.fetchContent() : await cdService.fetchContent(live);
+      content = val;
+      return val;
     } catch (e) {
+
       try {
-        content = JSON.parse(e.message);
+        val = JSON.parse(e.message);
       } catch (b) {
-        content = {
+        val = {
           error: {
             message: e.message,
             params,
@@ -50,6 +66,8 @@
         };
       }
       error = true;
+      content = val;
+      return val;
     }
   };
 </script>
@@ -95,7 +113,7 @@
     
     </MenuBar>
   </div>
-  {#if selected==='Staged'}
+  {#if selected === 'Staged' || selected === 'Live'}
     {#await load then show}
       <div class="code">
         <pre>
@@ -108,6 +126,6 @@
   {:else if selected==='Live'}
       <h1>Live</h1>
   {:else if selected==='Diff'}
-      <h1>DIFF</h1>
+      <Diff json1={content} {json2}/>
   {/if}
 </main>
