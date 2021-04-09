@@ -47,6 +47,12 @@
 </script>
 
 <style>
+  .settings {
+    padding: 0.5em;
+    background: #eee;
+    box-sizing: border-box;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.18);
+  }
   select,
   input,
   label {
@@ -61,38 +67,45 @@
   label {
     margin-left: 0.5em;
   }
-  nav {
-    padding: 0.5em;
-    background: #eee;
-    box-sizing: border-box;
-  }
   .short {
     width: 10em;
   }
+  div {
+    margin: 0.5rem;
+  }
 </style>
 
-<nav>
-  <label for="v2">v2:</label>
-  <input type="checkbox" id="v2" bind:checked={v2} on:change={() => update()} />
-  <label for="depth">{v2 ? 'depth:' : 'scope'}</label>
-  <select id="depth" bind:value={depth} on:change={() => update()}>
-    {#each depthOptions as option}
-      <option value={option.value}>{v2 ? option.label : option.v1Label}</option>
-    {/each}
-  </select>
-  <label for="format">{v2 ? 'format:' : 'fullBodyObject'}</label>
-  <select id="format" bind:value={format} on:change={() => update()}>
-    {#each formatOptions as option}
-      <option value={option.value}>{v2 ? option.label : option.v1Label}</option>
-    {/each}
-  </select>
+<div class="settings">
+  <div>
+    <label for="v2">v2:</label>
+    <input type="checkbox" id="v2" bind:checked={v2} on:change={() => update()} />
+  </div>
+  <div>
+    <label for="depth">{v2 ? 'depth:' : 'scope'}</label>
+    <select id="depth" bind:value={depth} on:change={() => update()}>
+      {#each depthOptions as option}
+        <option value={option.value}>{v2 ? option.label : option.v1Label}</option>
+      {/each}
+    </select>
+  </div>
+  <div>
+    <label for="format">{v2 ? 'format:' : 'fullBodyObject'}</label>
+    <select id="format" bind:value={format} on:change={() => update()}>
+      {#each formatOptions as option}
+        <option value={option.value}>{v2 ? option.label : option.v1Label}</option>
+      {/each}
+    </select>
+  </div>
+  
   {#if !v2}
+  <div>
     <label for="store">store:</label>
     <input
-      class="short"
-      type="input"
-      id="store"
-      bind:value={store}
-      on:change={() => update()} />
+    class="short"
+    type="input"
+    id="store"
+    bind:value={store}
+    on:change={() => update()} />
+  </div>
   {/if}
-</nav>
+</div>

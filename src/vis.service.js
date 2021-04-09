@@ -29,7 +29,7 @@ export class VisService {
 
   listenForChanges(method) {
     if(!this.subscribed) {
-      form.changed(method);
+      form.changed(method, this.options);
       this.subscribed = true;
     }
   }

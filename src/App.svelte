@@ -1,7 +1,8 @@
 <script>
   import { CDService } from "./cd.service.js";
   import { VisService } from "./vis.service.js";
-  import APIOptions from "./APIOptions.svelte";
+  import Settings from "./Settings.svelte";
+  import MenuBar from "./MenuBar.svelte";
   import hljs from "highlight.js/lib/core";
   import json from "highlight.js/lib/languages/json";
   import "highlight.js/styles/github.css";
@@ -9,6 +10,8 @@
   hljs.registerLanguage("json", json);
   const cdService = new CDService(params);
   const visService = new VisService(params);
+  const tabs = ["Staged", "Live", "Diff"];
+  let selected = "Staged";
   let error = false;
   let content = {};
   let load;
@@ -55,16 +58,13 @@
   main {
     border: 1em solid white;
   }
-  .error pre {
-    border: 1px solid red;
-  }
 
   .grid-container {
     display: grid;
     grid-template-columns: 1fr;
-    grid-template-rows: 2em 1fr;
+    grid-template-rows: 3rem 1fr;
     grid-template-areas: "tools" "code";
-    grid-gap: 0.5em;
+    grid-gap: 0.5rem;
   }
 
   .tools {
@@ -79,7 +79,9 @@
 <div />
 <main class={error ? 'grid-container error' : 'grid-container'}>
   <div class="tools">
-    <APIOptions
+    <MenuBar {tabs} {selected} on:change={(e)=>selected = e.detail}>
+    <div slot="settings"><Settings
+      
       v2 = {params.v2}
       format = {params.format}
       depth = {params.depth}
@@ -88,15 +90,25 @@
         cdService.setParams(e.detail);
         visService.setParams(e.detail);
         loadData();
-      }} />
+      }} /></div>
+    
+    </MenuBar>
   </div>
-  {#await load then show}
-    <div class="code">
-      <pre>
-        <code class="json">
-          {@html hljs.highlight('json', JSON.stringify(content, null, 2), true).value}
-        </code>
-      </pre>
-    </div>
-  {/await}
+  {#if selected==='Staged'}
+    {#await load then show}
+      <div class="code">
+        <pre>
+          <code class="json">
+            {@html hljs.highlight('json', JSON.stringify(content, null, 2), true).value}
+          </code>
+        </pre>
+      </div>
+    {/await}
+  {/if}
+  {#if selected==='Live'}
+      <h1>Live</h1>
+  {/if}
+  {#if selected==='Diff'}
+      <h1>DIFF</h1>
+  {/if}
 </main>
