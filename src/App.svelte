@@ -37,7 +37,7 @@
   const loadData = async () => {
     error = false;
     try {
-      content = useVisConnection ? await visService.fetchContent() : await cdService.fetchContent();
+      content = useVisConnection ? await visService.fetchContent() : await cdService.fetchStagedContent();
     } catch (e) {
       try {
         content = JSON.parse(e.message);
@@ -86,6 +86,7 @@
       format = {params.format}
       depth = {params.depth}
       store = {params.store}
+      hub = {params.hub}
       on:change={(e) => {
         cdService.setParams(e.detail);
         visService.setParams(e.detail);
@@ -104,11 +105,9 @@
         </pre>
       </div>
     {/await}
-  {/if}
-  {#if selected==='Live'}
+  {:else if selected==='Live'}
       <h1>Live</h1>
-  {/if}
-  {#if selected==='Diff'}
+  {:else if selected==='Diff'}
       <h1>DIFF</h1>
   {/if}
 </main>

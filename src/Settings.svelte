@@ -4,6 +4,7 @@
   export let depth;
   export let v2;
   export let store;
+  export let hub;
   const dispatch = createEventDispatcher();
   const depthOptions = [
     {
@@ -105,6 +106,16 @@
     type="input"
     id="store"
     bind:value={store}
+    on:change={() => update()} />
+  </div>
+  {:else}
+  <div>
+    <label for="hub">hub:</label>
+    <input
+    class="short"
+    type="input"
+    id="hub"
+    bind:value={hub}
     on:change={() => update()} />
   </div>
   {/if}
