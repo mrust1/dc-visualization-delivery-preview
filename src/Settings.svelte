@@ -1,11 +1,5 @@
 <script>
-  import { createEventDispatcher } from "svelte";
-  export let format;
-  export let depth;
-  export let v2;
-  export let store;
-  export let hub;
-  const dispatch = createEventDispatcher();
+  import {format, depth, v2, store, hub} from "./settings.store";
   const depthOptions = [
     {
       label: "----",
@@ -41,10 +35,6 @@
       value: "inlined",
     },
   ];
-
-  function update() {
-    dispatch("change", { format, depth, v2, store });
-  }
 </script>
 
 <style>
@@ -79,34 +69,33 @@
 <div class="settings">
   <div>
     <label for="v2">v2:</label>
-    <input type="checkbox" id="v2" bind:checked={v2} on:change={() => update()} />
+    <input type="checkbox" id="v2" bind:checked={$v2} />
   </div>
   <div>
-    <label for="depth">{v2 ? 'depth:' : 'scope'}</label>
-    <select id="depth" bind:value={depth} on:change={() => update()}>
+    <label for="depth">{$v2 ? 'depth:' : 'scope'}</label>
+    <select id="depth" bind:value={$depth}>
       {#each depthOptions as option}
         <option value={option.value}>{v2 ? option.label : option.v1Label}</option>
       {/each}
     </select>
   </div>
   <div>
-    <label for="format">{v2 ? 'format:' : 'fullBodyObject'}</label>
-    <select id="format" bind:value={format} on:change={() => update()}>
+    <label for="format">{$v2 ? 'format:' : 'fullBodyObject'}</label>
+    <select id="format" bind:value={$format}>
       {#each formatOptions as option}
         <option value={option.value}>{v2 ? option.label : option.v1Label}</option>
       {/each}
     </select>
   </div>
   
-  {#if !v2}
+  {#if !$v2}
   <div>
     <label for="store">store:</label>
     <input
     class="short"
     type="input"
     id="store"
-    bind:value={store}
-    on:change={() => update()} />
+    bind:value={$store}/>
   </div>
   {:else}
   <div>
@@ -115,8 +104,7 @@
     class="short"
     type="input"
     id="hub"
-    bind:value={hub}
-    on:change={() => update()} />
+    bind:value={$hub}/>
   </div>
   {/if}
 </div>

@@ -1,65 +1,56 @@
 import wretch from 'wretch';
+import { get } from 'svelte/store';
+import {id, vse, format, locale, depth, v2, store, hub} from "./settings.store";
+class CDService {
 
-export class CDService {
-  constructor({ vse, depth, format, locale, id, v2, store, hub }) {
-    this.id = id;
-    this.depth = depth;
-    this.format = format;
-    this.locale = locale;
-    this.vse = vse;
-    this.v2 = v2;
-    this.store = store;
-    this.hub = hub;
+  constructor() {
+
   }
+
   constructBase(live) {
     if(live){
-      return this.v2
-      ? `https://${this.hub}.cdn.content.amplience.net/content/id/`
+      return get(v2)
+      ? `https://${get(hub)}.cdn.content.amplience.net/content/id/`
       : `https://cdn.c1.amplience.net/cms/content/query/`;
     } else {
-      return this.v2
-      ? `https://${this.vse}/content/id/`
-      : `https://${this.vse}/cms/content/query/`;
+      return get(v2)
+      ? `https://${get(vse)}/content/id/`
+      : `https://${get(vse)}/cms/content/query/`;
     }
   }
 
   constructFullPath(live) {
-    return this.v2 ? this.cdv2(live) : this.cdv1(live);
+    return get(v2) ? this.cdv2(live) : this.cdv1(live);
   }
 
   cdv1(live) {
     let query = {
-      'sys.iri': `http://content.cms.amplience.com/${this.id}`,
+      'sys.iri': `http://content.cms.amplience.com/${get(id)}`,
     };
-    let scope = this.depth === 'root' ? 'root' : 'tree';
-    let fullBodyObject = this.format === 'linked' ? 'false' : 'true';
+    let scope = get(depth) === 'root' ? 'root' : 'tree';
+    let fullBodyObject = get(format) === 'linked' ? 'false' : 'true';
     return `${this.constructBase(live)}?query=${encodeURI(JSON.stringify(query))}&store=${
-      this.store
+      get(store)
     }&scope=${scope}&fullBodyObject=${fullBodyObject}`;
   }
 
   cdv2(live) {
-    let url = `${this.constructBase(live)}${this.id}?depth=${this.depth}&format=${
-      this.format
+    let url = `${this.constructBase(live)}${get(id)}?depth=${get(depth)}&format=${
+      get(format)
     }`;
-    if (this.locale) {
-      url = `${url}&locale=${this.locale}`;
+    if (get(locale)) {
+      url = `${url}&locale=${get(locale)}`;
     }
     return url;
   }
 
-  setParams({ format, depth, v2, store }) {
-    this.format = format;
-    this.depth = depth;
-    this.v2 = v2;
-    this.store = store;
-  }
-
   async fetchContent(live) {
-    if(this.id==='{{content.sys.id}}' || this.id === undefined) {
+    if(get(id)==='{{content.sys.id}}' || get(id) === undefined) {
       throw(new Error('no content item'));
     }
     let content = await wretch(this.constructFullPath(live)).get().json();
     return content;
   }
 }
+
+export const cdService = new CDService();
