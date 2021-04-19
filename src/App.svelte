@@ -1,22 +1,21 @@
 <script>
-  import { loadData, setLive, setStaged, setDiff, mainContent, secondaryContent} from './data.service';
-  import JsonViewer from "./JsonViewer.svelte";
-  import Settings from "./Settings.svelte";
-  import Diff from "./Diff.svelte";
-  import MenuBar from "./MenuBar.svelte";
-  import * as params from "./urlparams";
-  const tabs = ["Staged", "Live", "Diff"];
-  let selected = "Staged";
+  import { setLive, setStaged, setRealtime, setDiff, mainContent, secondaryContent} from './data/data.service';
+  import { selected } from './menu/menu.store';
+  import JsonViewer from "./json-viewers/JsonViewer.svelte";
+  import Diff from "./json-viewers/Diff.svelte";
+  import Menu from "./menu/Menu.svelte";
+  selected.subscribe((s)=>{
+    if(s === 'Published') {
+      setLive();
+    } else if(s === 'Staged') {
+      setStaged();
+    } else if(s === 'Realtime') {
+      setRealtime();
+    } else if(s === 'Diff') {
+      setDiff();
+    }
+  })
 
-  $: if(selected === 'Live') {
-    setLive();
-  }
-  $: if(selected === 'Staged') {
-    setStaged();
-  }
-  $: if(selected === 'Diff') {
-    setDiff();
-  }
   
 </script>
 
@@ -43,19 +42,15 @@
 </style>
 
 <div />
-<main>
+<main class="grid-container">
   <div class="tools">
-    <MenuBar {tabs} {selected} on:change={(e)=>selected = e.detail}>
-    <div slot="settings">
-      <Settings/>
-    </div>
-    </MenuBar>
+    <Menu/>
   </div>
-  {#if selected === 'Staged' || selected === 'Live'}
+  {#if $selected === 'Realtime' || $selected === 'Staged' || $selected === 'Published'}
     <div class="code">
       <JsonViewer content={$mainContent}/>
     </div>
-  {:else if selected==='Diff'}
+  {:else if $selected === 'Diff'}
       <Diff json1={$mainContent} json2={$secondaryContent}/>
   {/if}
 </main>

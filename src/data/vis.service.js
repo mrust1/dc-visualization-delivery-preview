@@ -1,5 +1,5 @@
 import {init, form} from 'dc-visualization-sdk';
-
+export 
 class VisService {
   constructor() {
     this.options = {
@@ -12,10 +12,7 @@ class VisService {
   }
 
   listenForChanges(method) {
-    if(!this.subscribed) {
-      form.changed(method, this.options);
-      this.subscribed = true;
-    }
+    return form.changed(method, this.options);
   }
 
   async connect() {
