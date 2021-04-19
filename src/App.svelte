@@ -15,8 +15,6 @@
   .grid-container {
     display: grid;
     grid-template-columns: 1fr;
-    grid-template-rows: 3rem 1fr;
-    grid-template-areas: "tools" "code";
     grid-gap: 0.5rem;
   }
 
@@ -27,10 +25,14 @@
   .code {
     grid-area: code;
   }
+
+  .settings {
+    grid-area: settings;
+  }
 </style>
 
 <div />
-<main class="grid-container">
+<main class="grid-container" style="grid-template-rows: 3rem 1fr {$selected === 'Realtime' ? '1fr' : ''}; grid-template-areas: 'tools' 'code' {$selected === 'Realtime' ? '\'settings\'':''};">
   <div class="tools">
     <Menu/>
   </div>
@@ -40,5 +42,12 @@
     </div>
   {:else if $selected === 'Diff'}
       <Diff json1={$mainContent} json2={$secondaryContent}/>
+  {/if}
+
+  {#if $selected === 'Realtime'}
+  <div class="settings">
+    <h2>Settings</h2>
+    <JsonViewer content={$secondaryContent}/>
+  </div>
   {/if}
 </main>

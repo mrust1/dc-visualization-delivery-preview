@@ -6,6 +6,8 @@ import { depth, hub, format } from "../settings/settings.store";
 export let mainContent = writable({});
 export let secondaryContent = writable({});
 export let connected = writable(false);
+let unsubscribe;
+let unsubSettings;
 
 const update = async () => {
   const s = get(selected);
@@ -18,13 +20,19 @@ const update = async () => {
     mainContent.set(await loadData());
   } else if(s === 'Realtime') {
     mainContent.set(await visData());
+    secondaryContent.set(await visService.fetchsettings());
+    if(unsubSettings){
+      unsubSettings();
+    }
+    unsubSettings = visService.listenForSettingsChanges((settings)=>{
+      secondaryContent.set(settings);
+    });
   } else if(s === 'Diff') {
     mainContent.set(await loadData())
     secondaryContent.set(await loadData(true));
   }
 }
 
-let unsubscribe;
 visService.connect().then((e)=>{if(e===true){
   connected.set(true);
   hasConnected();

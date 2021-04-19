@@ -1,4 +1,4 @@
-import {init, form} from 'dc-visualization-sdk';
+import {init, form, settings} from 'dc-visualization-sdk';
 import { get } from 'svelte/store';
 import { depth, format } from "../settings/settings.store";
 class VisService {
@@ -9,6 +9,14 @@ class VisService {
       format: get(format),
       depth: get(depth)
     });
+  }
+
+  async fetchsettings() {
+    return await settings.get();
+  }
+
+  listenForSettingsChanges(method) {
+    return settings.changed(method);
   }
 
   listenForChanges(method) {
