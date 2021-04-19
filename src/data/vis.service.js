@@ -1,18 +1,21 @@
 import {init, form} from 'dc-visualization-sdk';
-export 
+import { get } from 'svelte/store';
+import { depth, format } from "../settings/settings.store";
 class VisService {
-  constructor() {
-    this.options = {
-      format: 'linked',
-      depth: 'all'
-    }
-  }
+  constructor() {}
+  
   async fetchContent() {
-    return await form.get(this.options);
+    return await form.get({
+      format: get(format),
+      depth: get(depth)
+    });
   }
 
   listenForChanges(method) {
-    return form.changed(method, this.options);
+    return form.changed(method, {
+      format: get(format),
+      depth: get(depth)
+    });
   }
 
   async connect() {

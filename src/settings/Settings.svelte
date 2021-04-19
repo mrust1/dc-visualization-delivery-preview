@@ -1,29 +1,17 @@
 <script>
-  import {format, depth, v2, store, hub} from "./settings.store";
+  import {format, depth, hub} from "./settings.store";
   const depthOptions = [
     {
-      label: "----",
-      v1Label: "----",
-      value: "",
-    },
-    {
       label: "root",
-      v1Label: "root",
       value: "root",
     },
     {
       label: "all",
-      v1Label: "tree",
       value: "all",
     },
   ];
 
   const formatOptions = [
-    {
-      label: "----",
-      v1Label: "----",
-      value: "",
-    },
     {
       label: "linked",
       v1Label: "false",
@@ -68,36 +56,21 @@
 
 <div class="settings">
   <div>
-    <label for="v2">v2:</label>
-    <input type="checkbox" id="v2" bind:checked={$v2} />
-  </div>
-  <div>
-    <label for="depth">{$v2 ? 'depth:' : 'scope'}</label>
+    <label for="depth">{'depth:'}</label>
     <select id="depth" bind:value={$depth}>
       {#each depthOptions as option}
-        <option value={option.value}>{v2 ? option.label : option.v1Label}</option>
+        <option value={option.value}>{option.label}</option>
       {/each}
     </select>
   </div>
   <div>
-    <label for="format">{$v2 ? 'format:' : 'fullBodyObject'}</label>
+    <label for="format">{'format:'}</label>
     <select id="format" bind:value={$format}>
       {#each formatOptions as option}
-        <option value={option.value}>{v2 ? option.label : option.v1Label}</option>
+        <option value={option.value}>{option.label}</option>
       {/each}
     </select>
   </div>
-  
-  {#if !$v2}
-  <div>
-    <label for="store">store:</label>
-    <input
-    class="short"
-    type="input"
-    id="store"
-    bind:value={$store}/>
-  </div>
-  {:else}
   <div>
     <label for="hub">hub:</label>
     <input
@@ -106,5 +79,4 @@
     id="hub"
     bind:value={$hub}/>
   </div>
-  {/if}
 </div>

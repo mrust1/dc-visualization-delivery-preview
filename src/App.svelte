@@ -1,21 +1,9 @@
 <script>
-  import { setLive, setStaged, setRealtime, setDiff, mainContent, secondaryContent} from './data/data.service';
+  import { mainContent, secondaryContent} from './data/data.service';
   import { selected } from './menu/menu.store';
   import JsonViewer from "./json-viewers/JsonViewer.svelte";
   import Diff from "./json-viewers/Diff.svelte";
   import Menu from "./menu/Menu.svelte";
-  selected.subscribe((s)=>{
-    if(s === 'Published') {
-      setLive();
-    } else if(s === 'Staged') {
-      setStaged();
-    } else if(s === 'Realtime') {
-      setRealtime();
-    } else if(s === 'Diff') {
-      setDiff();
-    }
-  })
-
   
 </script>
 
