@@ -8,25 +8,27 @@ export let secondaryContent = writable({});
 export let connected = writable(false);
 let unsubscribe;
 let unsubSettings;
+let unsubSave;
 
 const update = async () => {
   const s = get(selected);
   if(unsubscribe) {
     unsubscribe();
   }
+  if(unsubSettings){
+    unsubSettings();
+  }
+  if(unsubSave){
+    unsubSave();
+  }
+
   if(s === 'Published') {
     mainContent.set(await loadData(true));
   } else if(s === 'Staged') {
-    mainContent.set(await loadData());
+    saveData();
   } else if(s === 'Realtime') {
-    mainContent.set(await visData());
-    secondaryContent.set(await visService.fetchsettings());
-    if(unsubSettings){
-      unsubSettings();
-    }
-    unsubSettings = visService.listenForSettingsChanges((settings)=>{
-      secondaryContent.set(settings);
-    });
+    visData();
+    settingsData();
   } else if(s === 'Diff') {
     mainContent.set(await loadData())
     secondaryContent.set(await loadData(true));
@@ -43,11 +45,28 @@ depth.subscribe(update);
 hub.subscribe(update);
 format.subscribe(update);
 
+
+export const saveData = async () => {
+  if(visService.connected) {
+    unsubSave = visService.listenForSave((change)=>{
+      mainContent.set(await visService.fetchContent());
+    });
+  }
+  return mainContent.set(await visService.fetchContent());
+}
+
+export const settingsData = async () => {
+  unsubSettings = visService.listenForSettingsChanges((change)=>{
+    secondaryContent.set(settings);
+  });
+  return secondaryContent.set(await visService.fetchsettings());
+}
+
 export const visData = async () => {
   unsubscribe = visService.listenForChanges((change)=>{
     mainContent.set(change);
   });
-  return await visService.fetchContent()
+  return mainContent.set(await visService.fetchContent());
 }
 
 export const loadData = async (live) => {
