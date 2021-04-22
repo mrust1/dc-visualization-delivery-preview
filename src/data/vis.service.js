@@ -1,52 +1,67 @@
-import { init, form, settings } from 'dc-visualization-sdk';
-import { get } from 'svelte/store';
+import { init } from 'dc-visualization-sdk';
+import { writable, get } from 'svelte/store';
 import { depth, format } from "../settings/settings.store";
+
+export const connected = new writable(false);
 class VisService {
   constructor() {
-    this.connected = false;
   }
   
   async fetchContent() {
-    return await form.get({
+    return await this.sdk.form.get({
       format: get(format),
       depth: get(depth)
     });
   }
 
   async fetchsettings() {
-    return await settings.get();
+    return await this.sdk.settings.get();
   }
 
   listenForSave(method) {
-    return form.saved(method, {
+    return this.sdk.form.saved(method, {
       format: get(format),
       depth: get(depth)
     });
   }
 
+  listenForLocaleChange(method) {
+    return this.sdk.locale.changed(method);
+  }
+
+  async fetchLocale() {
+    return await this.sdk.locale.get();
+  }
+
   listenForSettingsChanges(method) {
-    return settings.changed(method);
+    return this.sdk.settings.changed(method);
   }
 
   async fetchlocale() {
-    return await locale.get();
+    return await this.sdk.locale.get();
   }
 
   listenForLocaleChanges(method) {
-    return locale.changed(method);
+    return this.sdk.locale.changed(method);
   }
 
   listenForChanges(method) {
-    return form.changed(method, {
+    return this.sdk.form.changed(method, {
       format: get(format),
       depth: get(depth)
     });
   }
 
   async connect() {
-    await init();
-    this.connected = true;
-    return true;
+    try{
+      const sdk = await init();
+      this.sdk = sdk;
+      connected.set(true);
+      return true;
+    } catch(e){
+      console.error(e);
+    }
+
   }
 }
 

@@ -48,7 +48,7 @@ format.subscribe(update);
 
 export const saveData = async () => {
   if(visService.connected) {
-    unsubSave = visService.listenForSave((change)=>{
+    unsubSave = visService.listenForSave(async (change)=>{
       mainContent.set(await visService.fetchContent());
     });
   }
