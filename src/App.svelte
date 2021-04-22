@@ -1,8 +1,9 @@
 <script>
-  import { mainContent, secondaryContent} from './data/data.service';
+  import { mainContent, secondaryContent, connected} from './data/data.service';
   import { selected } from './menu/menu.store';
   import JsonViewer from "./json-viewers/JsonViewer.svelte";
   import Diff from "./json-viewers/Diff.svelte";
+  import Realtime from "./realtime/Realtime.svelte";
   import Menu from "./menu/Menu.svelte";
   
 </script>
@@ -20,19 +21,20 @@
 
   .tools {
     grid-area: tools;
+    
   }
 
   .code {
     grid-area: code;
+    overflow-y: auto;
   }
 
-  .settings {
-    grid-area: settings;
+  .realtime {
+    grid-area: realtime;
   }
 </style>
-
 <div />
-<main class="grid-container" style="grid-template-rows: 3rem 1fr {$selected === 'Realtime' ? '1fr' : ''}; grid-template-areas: 'tools' 'code' {$selected === 'Realtime' ? '\'settings\'':''};">
+<main class="grid-container" style="grid-template-rows: 3rem 1fr {$connected ? '10rem' : '3rem'}; grid-template-areas: 'tools' 'code' 'realtime';">
   <div class="tools">
     <Menu/>
   </div>
@@ -44,10 +46,7 @@
       <Diff json1={$mainContent} json2={$secondaryContent}/>
   {/if}
 
-  {#if $selected === 'Realtime'}
-  <div class="settings">
-    <h2>Settings</h2>
-    <JsonViewer content={$secondaryContent}/>
+  <div class="realtime">
+    <Realtime />
   </div>
-  {/if}
 </main>

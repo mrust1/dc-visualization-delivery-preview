@@ -21,6 +21,7 @@
     "diff": "^5.0.0"
   },
   "dependencies": {
-    "sirv-cli": "^0.4.4"
+    "sirv-cli": "^0.4.4",
+    "svelte-spinner": "^2.0.2"
   }
 }

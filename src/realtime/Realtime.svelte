@@ -1,0 +1,153 @@
+<script>
+  import { connected } from "../data/data.service";
+  import CheckMark from "./CheckMark.svelte";
+  import UpdateAlert from "./UpdateAlert.svelte";
+  import Spinner from 'svelte-spinner';
+  import { visService } from '../data/vis.service';
+  let settings = {devices: []};
+  let device = '';
+  let locale = ''
+  let deliveryKey = ''
+  let editing = false;
+  let saving = false;
+  let editIcon = '';
+  let saveIcon = '';
+  connected.subscribe(async (c)=>{
+    if (!c) {
+      return;
+    }
+    visService.sdk.form.changed(() => flash(editIcon));
+    visService.sdk.form.saved(() => flash(saveIcon));
+    settings = await visService.sdk.settings.get();
+    locale = await visService.sdk.locale.get();
+    deliveryKey = await visService.sdk.deliveryKey.get();
+    visService.sdk.locale.changed( value => locale = value);
+    visService.sdk.deliveryKey.changed( value => deliveryKey = value);
+  })
+
+
+  function flash(element) {
+	requestAnimationFrame(() => { // instant red bg flash in
+		element.style.transition = 'none';
+		element.style.fill = 'rgba(255,62,0,1)';
+
+		setTimeout(() => {  // slow 1s fade out
+			element.style.transition = 'fill 0.5s';
+			element.style.fill = '';
+		});
+	});
+}
+</script>
+
+<style>
+  footer {
+    width: 100%;
+    height: 3rem;
+    background: #eee;
+    color: #666;
+    padding: 0.5rem;
+    box-sizing: border-box;
+  }
+  .bar {
+    display: grid;
+    grid-template-columns: 2rem 1fr 2rem 2rem;
+    grid-template-rows: 1fr;
+    gap: 0px 0.5rem;
+    grid-template-areas: "icon status save edit";
+    height: 2rem;
+  }
+  .icon {
+    grid-area: 'icon';
+    width: 2rem;
+    place-self: center;
+  }
+  .status {
+    grid-area: 'status';
+    align-self: center;
+  }
+  .save {
+    grid-area: 'save';
+    width: 2rem;
+    place-self: center;
+  }
+  .edit {
+    grid-area: 'edit';
+    width: 2rem;
+    place-self: center;
+  }
+  .full {
+    height: 10rem;
+  }
+
+  .data {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr 1fr 1fr 1fr;
+    gap: 0px 0px;
+    grid-template-areas:
+      "vse vse"
+      "contentItemId contentTypeId"
+      "locale deliveryKey"
+      "device devices";
+    height: 6.5rem;
+    margin-top: 0.5rem;
+    background: white;
+    padding: 0 0.5rem;
+  }
+  .data div {
+    align-self: center;
+    color: #444;
+    font-family: monospace;
+  }
+  .label {
+    color: #888;
+  }
+  .vse { grid-area: vse; }
+  .contentItemId { grid-area: contentItemId; }
+  .contentTypeId { grid-area: contentTypeId; }
+  .locale { grid-area: locale; }
+  .deliveryKey { grid-area: deliveryKey; }
+  .device { grid-area: device; }
+  .devices { grid-area: devices; }
+
+  .svg-highlight {
+    transition: none;
+		fill: rgba(255,62,0,1);
+  }
+  .svg-lowlight {
+    transition: 'fill 1.4s';
+    fill: rgba(255,62,0,0);
+  }
+</style>
+
+<footer class="{$connected ? 'full' : ''}">
+  <div class="bar">
+    <div class="icon">
+      {#if $connected}
+        <CheckMark animate="{$connected}" />
+      {:else}
+      <Spinner
+        size="2rem"
+        speed="800"
+        color="#777"
+        thickness="2"
+        gap="40"
+      />
+      {/if}    
+    </div>
+    <div class="status">{$connected ? 'Connected' : 'Connecting...'}</div>
+    <div class="save"><svg bind:this={saveIcon} xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px" fill="white"><path d="M0 0h24v24H0z" fill="none"/><path d="M17 3H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V7l-4-4zm-5 16c-1.66 0-3-1.34-3-3s1.34-3 3-3 3 1.34 3 3-1.34 3-3 3zm3-10H5V5h10v4z"/></svg></div>
+    <div class="edit"><svg bind:this={editIcon} xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px" fill="white"><path d="M0 0h24v24H0z" fill="none"/><path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/></svg></div>
+  </div>
+  {#if $connected}
+  <div class="data">
+    <div class="vse"><span class="label">vse:</span> {settings.vse}</div>
+    <div class="contentItemId"><span class="label">Content Id: </span>{visService.sdk.contentId}</div>
+    <div class="contentTypeId"><span class="label">Content Type Id: </span>{visService.sdk.contentTypeId}</div>
+    <div class="locale"><span class="label">Locale: </span><UpdateAlert data={locale}>{locale}</UpdateAlert></div>
+    <div class="deliveryKey"><span class="label">Delivery Key: </span><UpdateAlert data={deliveryKey}>{deliveryKey}</UpdateAlert></div>
+    <div class="device"><span class="label">Device: </span>{device}</div>
+    <div class="devices"><span class="label">Num Devices: </span>{settings.devices.length}</div>
+  </div>
+  {/if}
+</footer>

@@ -5,6 +5,7 @@ import { depth, format } from "../settings/settings.store";
 export const connected = new writable(false);
 class VisService {
   constructor() {
+     this.sdk;
   }
   
   async fetchContent() {
