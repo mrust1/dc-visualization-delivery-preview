@@ -21,6 +21,8 @@
     settings = await visService.sdk.settings.get();
     locale = await visService.sdk.locale.get();
     deliveryKey = await visService.sdk.deliveryKey.get();
+    device = await visService.sdk.device.get();
+    visService.sdk.device.changed( value => device = value);
     visService.sdk.locale.changed( value => locale = value);
     visService.sdk.deliveryKey.changed( value => deliveryKey = value);
   })
@@ -85,7 +87,7 @@
     grid-template-rows: 1fr 1fr 1fr 1fr;
     gap: 0px 0px;
     grid-template-areas:
-      "vse vse"
+      "vse snapshotId"
       "contentItemId contentTypeId"
       "locale deliveryKey"
       "device devices";
@@ -93,6 +95,22 @@
     margin-top: 0.5rem;
     background: white;
     padding: 0 0.5rem;
+    overflow-y: auto;
+  }
+
+  @media only screen and (max-width: 600px) {
+    .data {
+      grid-template-columns: 1fr;
+      grid-template-areas:
+      "vse"
+      "snapshotId"
+      "contentItemId"
+      "contentTypeId"
+      "locale"
+      "deliveryKey"
+      "device"
+      "devices";
+    }
   }
   .data div {
     align-self: center;
@@ -104,6 +122,7 @@
   }
   .vse { grid-area: vse; }
   .contentItemId { grid-area: contentItemId; }
+  .snapshotId { grid-area: snapshotId; }
   .contentTypeId { grid-area: contentTypeId; }
   .locale { grid-area: locale; }
   .deliveryKey { grid-area: deliveryKey; }
@@ -142,11 +161,12 @@
   {#if $connected}
   <div class="data">
     <div class="vse"><span class="label">vse:</span> {settings.vse}</div>
+    <div class="snapshotId"><span class="label">Snapshot Id: </span>{visService.sdk.snapshotId}</div>
     <div class="contentItemId"><span class="label">Content Id: </span>{visService.sdk.contentId}</div>
     <div class="contentTypeId"><span class="label">Content Type Id: </span>{visService.sdk.contentTypeId}</div>
     <div class="locale"><span class="label">Locale: </span><UpdateAlert data={locale}>{locale}</UpdateAlert></div>
     <div class="deliveryKey"><span class="label">Delivery Key: </span><UpdateAlert data={deliveryKey}>{deliveryKey}</UpdateAlert></div>
-    <div class="device"><span class="label">Device: </span>{device}</div>
+    <div class="device"><span class="label">Device: </span><UpdateAlert data={device}>{device.name}<span class="label">({device.width}x{device.height})</span> - {device.orientation}</UpdateAlert></div>
     <div class="devices"><span class="label">Num Devices: </span>{settings.devices.length}</div>
   </div>
   {/if}
