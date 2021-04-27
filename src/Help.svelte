@@ -4,7 +4,7 @@
 </script>
 <main>
   <h1>Help</h1>
-  <p>This visualization needs to be run inside DC. It has a number of tabs:</p>
+  <p>To use this visualization app it first needs to be added to a content type inside DC. It has a number of functions:</p>
   <ul>
     <li><b>Realtime</b> - This will show the in-progress content, even if it hasn't yet been saved. <b>Note:</b> all required fields need to be filled and valid for this to show.</li>
     <li><b>Staged</b> - This shows the latest version of your saved content.</li>
