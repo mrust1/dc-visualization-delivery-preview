@@ -1,4 +1,4 @@
-import { writable, get } from 'svelte/store';
+import { writable, get, derived } from 'svelte/store';
 import { vse, id, hub} from "../settings/urlparams";
 import { connected } from "../data/vis.service.js";
 
@@ -9,7 +9,7 @@ if(canFetchStaged()) {
 }
 
 if(canFetchPublished()) {
-  defaultTabs.push('Published');
+  defaultTabs.push('Live');
 }
 
 if(canFetchStaged() && canFetchPublished()) {
@@ -19,7 +19,7 @@ if(canFetchStaged() && canFetchPublished()) {
 export let selected = writable('');
 
 let defaultTab = setTimeout(()=>{
-  selected.set(defaultTabs[0])
+  selected.set(defaultTabs[0] || 'help');
 }, 500);
 
 export let tabs = writable(defaultTabs);
@@ -49,3 +49,12 @@ connected.subscribe((c)=>{
   }
   enableRealtime();
 })
+
+export const options = derived(tabs, ($tabs) => {
+	return $tabs.map((val)=>{
+    let l = val.toLowerCase()
+    if(l === 'realtime' || l === 'live' || l === 'staged') {
+      return l;
+    }
+  }).filter(item => item);
+}, []);

@@ -5,10 +5,14 @@ import { selected } from "../menu/menu.store";
 import { depth, hub, format } from "../settings/settings.store";
 export let mainContent = writable({});
 export let secondaryContent = writable({});
+export let base = writable('live');
+export let compare = writable('staged');
+export let options = writable(['live', 'staged', 'realtime']);
 let unsubscribe;
 let unsubSettings;
 let unsubSave;
 let unsubLocale;
+let clearAll = [];
 
 visService.connect();
 
@@ -73,7 +77,10 @@ const update = async () => {
     unsubLocale();
   }
 
-  if(s === 'Published') {
+  clearAll.forEach((item)=>item());
+  clearAll = [];
+
+  if(s === 'Live') {
     mainContent.set(await loadData(true));
   } else if(s === 'Staged') {
     stagedData();
@@ -81,8 +88,41 @@ const update = async () => {
     visData();
     settingsData();
   } else if(s === 'Diff') {
-    mainContent.set(await loadData())
-    secondaryContent.set(await loadData(true));
+    switch(get(compare)) {
+      case 'live':
+        mainContent.set(await loadData(true));
+        break;
+      case 'staged':
+        mainContent.set(await loadData());
+        clearAll.push(visService.listenForSave(async ()=>{
+          mainContent.set(await loadData());
+        }));
+        break;
+      case 'realtime':
+        mainContent.set(await visService.fetchContent());
+        clearAll.push(visService.listenForChanges((change)=>{
+          mainContent.set(change);
+        }));
+        break;
+    }
+
+    switch(get(base)) {
+      case 'live':
+        secondaryContent.set(await loadData(true));
+        break;
+      case 'staged':
+        secondaryContent.set(await loadData());
+        clearAll.push(visService.listenForSave(async ()=>{
+          secondaryContent.set(await loadData());
+        }));
+        break;
+      case 'realtime':
+        secondaryContent.set(await visService.fetchContent());
+        clearAll.push(visService.listenForChanges((change)=>{
+          secondaryContent.set(change);
+        }));
+        break;
+    }
   }
 }
 
@@ -90,6 +130,9 @@ selected.subscribe(update);
 depth.subscribe(update);
 hub.subscribe(update);
 format.subscribe(update);
+base.subscribe(update);
+compare.subscribe(update);
+
 
 
 

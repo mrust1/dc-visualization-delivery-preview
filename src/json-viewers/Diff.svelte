@@ -1,26 +1,7 @@
 <script>
-	import * as diff from 'diff';
-	export let json1;
-	export let json2;
-	$:diffPatch = diff.diffJson(json2, json1);
+  import DiffViewer from './DiffViewer.svelte';
+  import ChipBar from './ChipBar.svelte';
+  import { mainContent, secondaryContent} from '../data/data.service';
 </script>
-<code><pre>{#each diffPatch as patch}<span class={patch.added ? 'green' : patch.removed ? 'red' : 'grey'}>{patch.value}</span>{/each}</pre></code>
-<style>
-	.green::before {
-		content: " +";
-		position: absolute;
-	}
-	.green {
-		background: lightgreen;
-	}
-	.red::before {
-		content: " -";
-		position: absolute;
-	}
-	.red {
-		background: pink;
-	}
-	.grey {
-		color: #777;
-	}
-</style>
+<ChipBar></ChipBar>
+<DiffViewer json1={$mainContent} json2={$secondaryContent}/>

@@ -1,8 +1,9 @@
 <script>
-  import { mainContent, secondaryContent} from './data/data.service';
+  import { mainContent} from './data/data.service';
   import { connected, timeout } from './data/vis.service';
   import { selected } from './menu/menu.store';
   import JsonViewer from "./json-viewers/JsonViewer.svelte";
+  import Help from "./Help.svelte";
   import Diff from "./json-viewers/Diff.svelte";
   import Realtime from "./realtime/Realtime.svelte";
   import Menu from "./menu/Menu.svelte";
@@ -35,16 +36,20 @@
   }
 </style>
 <div />
-<main class="grid-container" style="grid-template-rows: 3rem 1fr {$timeout ? '' : $connected ? '10rem' : '3rem'}; grid-template-areas: 'tools' 'code' {$timeout ? '' : '\'realtime\''};">
+<main class="grid-container" style="grid-template-rows: 2.5rem 1fr {$timeout ? '' : $connected ? '10rem' : '3rem'}; grid-template-areas: 'tools' 'code' {$timeout ? '' : '\'realtime\''};">
   <div class="tools">
     <Menu/>
   </div>
-  {#if $selected === 'Realtime' || $selected === 'Staged' || $selected === 'Published'}
+  {#if $selected === 'Realtime' || $selected === 'Staged' || $selected === 'Live'}
     <div class="code">
       <JsonViewer content={$mainContent}/>
     </div>
   {:else if $selected === 'Diff'}
-      <Diff json1={$mainContent} json2={$secondaryContent}/>
+    <div class="code">
+      <Diff/>
+    </div>
+  {:else if $selected === 'help'}
+    <Help/>
   {/if}
 
   <div class="realtime" style="display:{$timeout ? 'none' : ''}">

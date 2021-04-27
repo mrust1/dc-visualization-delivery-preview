@@ -11,6 +11,7 @@
     padding: 10px 20px;
     box-sizing: border-box;
     cursor: pointer;
+    height:100%;
   }
 
   div:hover {
