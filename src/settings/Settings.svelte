@@ -1,5 +1,5 @@
 <script>
-  import {format, depth, hub} from "./settings.store";
+  import {format, depth, hub, locale} from "./settings.store";
   const depthOptions = [
     {
       label: "root",
@@ -34,7 +34,7 @@
   }
   select,
   input,
-  label {
+  label, div {
     font-family: Helvetica, Arial, sans-serif;
     line-height: 1em;
     box-sizing: border-box;
@@ -43,14 +43,18 @@
     vertical-align: middle;
     margin: 0;
   }
-  label {
+  label, .label {
     margin-left: 0.5em;
   }
   .short {
     width: 10em;
   }
   div {
-    margin: 0.5rem;
+    margin: 0.5em;
+  }
+  .locale {
+    color: #666;
+    vertical-align:text-bottom;
   }
 </style>
 
@@ -78,5 +82,8 @@
     type="input"
     id="hub"
     bind:value={$hub}/>
+  </div>
+  <div class="label">
+    <label>locale:</label> <span class="locale">{$locale ? $locale : 'none'}</span>
   </div>
 </div>

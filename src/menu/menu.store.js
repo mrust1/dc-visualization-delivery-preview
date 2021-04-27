@@ -1,5 +1,6 @@
 import { writable, get } from 'svelte/store';
 import { vse, id, hub} from "../settings/urlparams";
+import { connected } from "../data/vis.service.js";
 
 let defaultTabs = [];
 
@@ -15,6 +16,14 @@ if(canFetchStaged() && canFetchPublished()) {
   defaultTabs.push('Diff');
 }
 
+export let selected = writable('');
+
+let defaultTab = setTimeout(()=>{
+  selected.set(defaultTabs[0])
+}, 500);
+
+export let tabs = writable(defaultTabs);
+
 function canFetchStaged() {
   return vse && id;
 }
@@ -23,7 +32,8 @@ function canFetchPublished() {
   return hub && id;
 }
 
-export function hasConnected() {
+function enableRealtime() {
+  clearTimeout(defaultTab);
   let t = get(tabs);
   if (t.indexOf('Diff') === -1 && (canFetchStaged() || canFetchPublished())) {
     t.push('Diff');
@@ -32,5 +42,10 @@ export function hasConnected() {
   tabs.set(t);
   selected.set('Realtime');
 }
-export let tabs = writable(defaultTabs);
-export let selected = writable('Live');
+
+connected.subscribe((c)=>{
+  if(!c) {
+    return;
+  }
+  enableRealtime();
+})

@@ -3,6 +3,7 @@ import { writable, get } from 'svelte/store';
 import { depth, format } from "../settings/settings.store";
 
 export const connected = new writable(false);
+export const timeout = new writable(false);
 class VisService {
   constructor() {
      this.sdk;
@@ -54,10 +55,14 @@ class VisService {
   }
 
   async connect() {
+    const t = setTimeout(()=>{
+      timeout.set(true);
+    }, 5000);
     try{
       const sdk = await init();
       this.sdk = sdk;
       connected.set(true);
+      clearTimeout(t);
       return true;
     } catch(e){
       console.error(e);

@@ -1,17 +1,22 @@
 <script>
-  import { connected } from "../data/data.service";
   import CheckMark from "./CheckMark.svelte";
   import UpdateAlert from "./UpdateAlert.svelte";
   import Spinner from 'svelte-spinner';
-  import { visService } from '../data/vis.service';
+  import { visService, connected, timeout } from '../data/vis.service';
+  import { locale } from '../settings/settings.store';
+
   let settings = {devices: []};
   let device = '';
-  let locale = ''
-  let deliveryKey = ''
-  let editing = false;
-  let saving = false;
+  let deliveryKey = '';
   let editIcon = '';
   let saveIcon = '';
+
+  timeout.subscribe(async (t)=>{
+    if (!t) {
+      return;
+    }
+  })
+
   connected.subscribe(async (c)=>{
     if (!c) {
       return;
@@ -19,11 +24,11 @@
     visService.sdk.form.changed(() => flash(editIcon));
     visService.sdk.form.saved(() => flash(saveIcon));
     settings = await visService.sdk.settings.get();
-    locale = await visService.sdk.locale.get();
+    locale.set(await visService.sdk.locale.get());
     deliveryKey = await visService.sdk.deliveryKey.get();
     device = await visService.sdk.device.get();
     visService.sdk.device.changed( value => device = value);
-    visService.sdk.locale.changed( value => locale = value);
+    visService.sdk.locale.changed( value => locale.set(value));
     visService.sdk.deliveryKey.changed( value => deliveryKey = value);
   })
 
@@ -49,6 +54,11 @@
     color: #666;
     padding: 0.5rem;
     box-sizing: border-box;
+    transition: opacity .5s;
+    opacity: 1;
+  }
+  .hide {
+    opacity: 0;
   }
   .bar {
     display: grid;
@@ -134,12 +144,12 @@
 		fill: rgba(255,62,0,1);
   }
   .svg-lowlight {
-    transition: 'fill 1.4s';
+    transition: fill 1.4s;
     fill: rgba(255,62,0,0);
   }
 </style>
 
-<footer class="{$connected ? 'full' : ''}">
+<footer class="{$connected ? 'full' : ''} {$timeout ? 'hide' : ''}">
   <div class="bar">
     <div class="icon">
       {#if $connected}
@@ -164,7 +174,7 @@
     <div class="snapshotId"><span class="label">Snapshot Id: </span>{visService.sdk.snapshotId}</div>
     <div class="contentItemId"><span class="label">Content Id: </span>{visService.sdk.contentId}</div>
     <div class="contentTypeId"><span class="label">Content Type Id: </span>{visService.sdk.contentTypeId}</div>
-    <div class="locale"><span class="label">Locale: </span><UpdateAlert data={locale}>{locale}</UpdateAlert></div>
+    <div class="locale"><span class="label">Locale: </span><UpdateAlert data={$locale}>{$locale}</UpdateAlert></div>
     <div class="deliveryKey"><span class="label">Delivery Key: </span><UpdateAlert data={deliveryKey}>{deliveryKey}</UpdateAlert></div>
     <div class="device"><span class="label">Device: </span><UpdateAlert data={device}>{device.name}<span class="label">({device.width}x{device.height})</span> - {device.orientation}</UpdateAlert></div>
     <div class="devices"><span class="label">Num Devices: </span>{settings.devices.length}</div>

@@ -1,58 +1,27 @@
 import { writable, get } from 'svelte/store';
 import { cdService } from "./cd.service.js";
-import { visService } from "./vis.service.js";
-import { selected, hasConnected } from "../menu/menu.store";
+import { visService, connected } from "./vis.service.js";
+import { selected } from "../menu/menu.store";
 import { depth, hub, format } from "../settings/settings.store";
 export let mainContent = writable({});
 export let secondaryContent = writable({});
-export let connected = writable(false);
 let unsubscribe;
 let unsubSettings;
 let unsubSave;
+let unsubLocale;
 
-const update = async () => {
-  const s = get(selected);
-  if(unsubscribe) {
-    unsubscribe();
-  }
-  if(unsubSettings){
-    unsubSettings();
-  }
-  if(unsubSave){
-    unsubSave();
-  }
+visService.connect();
 
-  if(s === 'Published') {
-    mainContent.set(await loadData(true));
-  } else if(s === 'Staged') {
-    saveData();
-  } else if(s === 'Realtime') {
-    visData();
-    settingsData();
-  } else if(s === 'Diff') {
-    mainContent.set(await loadData())
-    secondaryContent.set(await loadData(true));
-  }
-}
-
-visService.connect().then((e)=>{if(e===true){
-  connected.set(true);
-  hasConnected();
-}});
-
-selected.subscribe(update);
-depth.subscribe(update);
-hub.subscribe(update);
-format.subscribe(update);
-
-
-export const saveData = async () => {
-  if(visService.connected) {
+export const stagedData = async () => {
+  if(get(connected)) {
     unsubSave = visService.listenForSave(async (change)=>{
-      mainContent.set(await visService.fetchContent());
+      mainContent.set(await loadData());
+    });
+    unsubLocale = visService.listenForLocaleChange(async (change)=>{
+      mainContent.set(await loadData());
     });
   }
-  return mainContent.set(await visService.fetchContent());
+  return mainContent.set(await loadData());
 }
 
 export const settingsData = async () => {
@@ -88,3 +57,39 @@ export const loadData = async (live) => {
     return val;
   }
 };
+
+const update = async () => {
+  const s = get(selected);
+  if(unsubscribe) {
+    unsubscribe();
+  }
+  if(unsubSettings){
+    unsubSettings();
+  }
+  if(unsubSave){
+    unsubSave();
+  }
+  if(unsubLocale){
+    unsubLocale();
+  }
+
+  if(s === 'Published') {
+    mainContent.set(await loadData(true));
+  } else if(s === 'Staged') {
+    stagedData();
+  } else if(s === 'Realtime') {
+    visData();
+    settingsData();
+  } else if(s === 'Diff') {
+    mainContent.set(await loadData())
+    secondaryContent.set(await loadData(true));
+  }
+}
+
+selected.subscribe(update);
+depth.subscribe(update);
+hub.subscribe(update);
+format.subscribe(update);
+
+
+
