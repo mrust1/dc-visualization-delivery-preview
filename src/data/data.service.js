@@ -94,15 +94,19 @@ const update = async () => {
         break;
       case 'staged':
         mainContent.set(await loadData());
-        clearAll.push(visService.listenForSave(async ()=>{
-          mainContent.set(await loadData());
-        }));
+        if(get(connected)) {
+          clearAll.push(visService.listenForSave(async ()=>{
+            mainContent.set(await loadData());
+          }));
+        }
         break;
       case 'realtime':
         mainContent.set(await visService.fetchContent());
-        clearAll.push(visService.listenForChanges((change)=>{
-          mainContent.set(change);
-        }));
+        if(get(connected)) {
+          clearAll.push(visService.listenForChanges((change)=>{
+            mainContent.set(change);
+          }));
+        }
         break;
     }
 
@@ -112,15 +116,19 @@ const update = async () => {
         break;
       case 'staged':
         secondaryContent.set(await loadData());
-        clearAll.push(visService.listenForSave(async ()=>{
-          secondaryContent.set(await loadData());
-        }));
+        if(get(connected)) {
+          clearAll.push(visService.listenForSave(async ()=>{
+            secondaryContent.set(await loadData());
+          }));
+        }
         break;
       case 'realtime':
         secondaryContent.set(await visService.fetchContent());
-        clearAll.push(visService.listenForChanges((change)=>{
-          secondaryContent.set(change);
-        }));
+        if(get(connected)) {
+          clearAll.push(visService.listenForChanges((change)=>{
+            secondaryContent.set(change);
+          }));
+        }
         break;
     }
   }
