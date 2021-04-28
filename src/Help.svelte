@@ -18,7 +18,8 @@
     <li><code>vse</code> - Your virtual staging environment, usually &lbrace;&lbrace;vse.domain&rbrace;&rbrace;. Required for staging view.</li>
     <li><code>hub</code> - Your hub name, required for live view.</li>
     <li><code>realtime</code> - Realtime flag, required for real-time view, should be true.</li>
-    <li><code>locale</code> - The locale to use, usually &lbrace;&lbrace;locales&rbrace;&rbrace;.</li>
+    <li><code>locale</code> - The locale to use, usually &lbrace;&lbrace;locales&rbrace;&rbrace;. Optional: if not used the realtime locale switching will be faster, but there will be no locale filtering for Staging and Live tabs.
+    </li>
   </ul>
   <h2>Options</h2> 
   <p>The following options can be used to configure the default Delivery API request options:</p>

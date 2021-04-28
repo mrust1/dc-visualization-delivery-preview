@@ -13,7 +13,7 @@ To use this visualization app it first needs to be added to a content type insid
   * `vse` - Your virtual staging environment, usually {{vse.domain}}. Required for staging tab.
   * `hub` - Your hub name, required for live tab.
   * `realtime` - Realtime flag, required for Realtime tab, should be true.
-  * `locale` - The locale to use, usually {{locales}}. Required to provide locale filtering for Staging and Live tabs.
+  * `locale` - The locale to use, usually {{locales}}. Optional: if not used the realtime locale switching will be faster, but there will be no locale filtering for Staging and Live tabs.
   
 ### Options
   <p>The following options can be used to configure the default Delivery API request options:</p>
