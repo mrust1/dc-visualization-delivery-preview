@@ -1,81 +1,58 @@
 <script>
-  import { CDService } from "./cd.service.js";
-  import APIOptions from "./APIOptions.svelte";
-  import hljs from "highlight.js/lib/core";
-  import json from "highlight.js/lib/languages/json";
-  import "highlight.js/styles/github.css";
-  import * as params from "./urlparams";
-  console.log(params);
-  hljs.registerLanguage("json", json);
-  let service = new CDService(params);
-  let error = false;
-  let content = {};
-  const loadData = async () => {
-    error = false;
-    try {
-      content = await service.fetchContent();
-    } catch (e) {
-      try {
-        content = JSON.parse(e.message);
-      } catch (b) {
-        content = {
-          error: {
-            message: e.message,
-            params,
-          },
-        };
-      }
-      error = true;
-    }
-  };
-  let load = loadData();
+  import { mainContent} from './data/data.service';
+  import { connected, timeout } from './data/vis.service';
+  import { selected } from './menu/menu.store';
+  import JsonViewer from "./json-viewers/JsonViewer.svelte";
+  import Help from "./Help.svelte";
+  import Diff from "./json-viewers/Diff.svelte";
+  import Realtime from "./realtime/Realtime.svelte";
+  import Menu from "./menu/Menu.svelte";
+  
 </script>
 
 <style>
   main {
     border: 1em solid white;
   }
-  .error pre {
-    border: 1px solid red;
-  }
 
   .grid-container {
     display: grid;
     grid-template-columns: 1fr;
-    grid-template-rows: 2em 1fr;
-    grid-template-areas: "tools" "code";
-    grid-gap: 0.5em;
+    grid-gap: 0.5rem;
   }
 
   .tools {
     grid-area: tools;
+    
   }
 
   .code {
     grid-area: code;
+    overflow-y: auto;
+  }
+
+  .realtime {
+    grid-area: realtime;
   }
 </style>
-
 <div />
-<main class={error ? 'grid-container error' : 'grid-container'}>
+<main class="grid-container" style="grid-template-rows: 2.5rem 1fr {$timeout ? '' : $connected ? '10rem' : '3rem'}; grid-template-areas: 'tools' 'code' {$timeout ? '' : '\'realtime\''};">
   <div class="tools">
-    <APIOptions
-      v2 = {params.v2}
-      format = {params.format}
-      depth = {params.depth}
-      store = {params.store}
-      on:change={(e) => {
-        service.setParams(e.detail);
-        loadData();
-      }} />
+    <Menu/>
   </div>
-  {#await load then show}
+  {#if $selected === 'Realtime' || $selected === 'Staged' || $selected === 'Live'}
     <div class="code">
-      <pre>
-        <code class="json">
-          {@html hljs.highlight('json', JSON.stringify(content, null, 2), true).value}
-        </code>
-      </pre>
+      <JsonViewer content={$mainContent}/>
     </div>
-  {/await}
+  {:else if $selected === 'Diff'}
+    <div class="code">
+      <Diff/>
+    </div>
+  {:else if $selected === 'help'}
+    <Help/>
+  {/if}
+
+  <div class="realtime" style="display:{$timeout ? 'none' : ''}">
+    <Realtime />
+  </div>
 </main>

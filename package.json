@@ -1,5 +1,5 @@
 {
-  "name": "cdv2-viz",
+  "name": "dc-visualization-delivery-preview",
   "version": "0.1.0",
   "scripts": {
     "build": "rollup -c",
@@ -16,9 +16,12 @@
     "rollup-plugin-svelte": "^5.0.3",
     "rollup-plugin-terser": "^5.1.2",
     "svelte": "^3.0.0",
-    "wretch": "^1.7.2"
+    "wretch": "^1.7.2",
+    "dc-visualization-sdk": "git@github.com:amplience/dc-visualization-sdk.git",
+    "diff": "^5.0.0"
   },
   "dependencies": {
-    "sirv-cli": "^0.4.4"
+    "sirv-cli": "^0.4.4",
+    "svelte-spinner": "^2.0.2"
   }
 }
