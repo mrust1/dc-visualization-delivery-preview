@@ -1,20 +1,28 @@
-# Content Delivery Visualization 
+# dc-visualization-delivery-preview
 
-Used to generate a preview of your delivery data.
-
-![preview](preview.png)
-
-## URL params
-
-### Required
-* `vse` - Staging enviroment to serve content from.
-* `id` - id of content item to load.
-
-### Optional
-* `depth` - Either `root` or `all`. In cdv1 mode these map to `root` and `tree` respectively for the param `scope`.
-* `format` - Either `linked` or `inline`. In cdv1 mode these map to `false` and `true` respectively for the param `fullBodyObject`.
-* `v2` - set to `false` to enable cdv1 mode.
-* `store` - sets the `store` value used in cdv1 mode. Defaults to `store`.
+To use this visualization app it first needs to be added to a content type inside DC. It has a number of functions:
+  * **Realtime** - This displays the in-progress content, even if it hasn't yet been saved. **Note:** all required fields need to be filled and valid for this to update.
+  * **Staged** - This displays the latest version of your saved content.
+  * **Live** - This displays the published version of your content.
+  * **Diff** - This tab displays the difference between the available tabs.
+## Url Params
+### Capabilities
+  <p>The capabilities of this app depend on the URL parameters supplied.</p>
+  
+  * `id` - This Content Item ID, usually {{content.sys.id}}. Required for staging, live and diff tab.
+  * `vse` - Your virtual staging environment, usually {{vse.domain}}. Required for staging tab.
+  * `hub` - Your hub name, required for live tab.
+  * `realtime` - Realtime flag, required for Realtime tab, should be true.
+  * `locale` - The locale to use, usually {{locales}}. Required to provide locale filtering for Staging and Live tabs.
+  
+### Options
+  <p>The following options can be used to configure the default Delivery API request options:</p>
+  
+  * `format` - Can either be `linked` or `inline` (default).
+  * `depth` - Can either be `root` or `all` (default).
+  
+  <h2>Example URL to use</h2>
+http://localhost:5000?id={{content.sys.id}}&vse={{vse.domain}}&locale={{locales}}&hub=your-hub&realtime=true
 
 ## Get started
 
@@ -36,40 +44,4 @@ To create an optimised version of the app:
 
 ```bash
 npm run build
-```
-
-You can run the newly built app with `npm run start`. This uses [sirv](https://github.com/lukeed/sirv), which is included in your package.json's `dependencies` so that the app will work when you deploy to platforms like [Heroku](https://heroku.com).
-
-## Deploying to the web
-
-### With [now](https://zeit.co/now)
-
-Install `now` if you haven't already:
-
-```bash
-npm install -g now
-```
-
-Then, from within your project folder:
-
-```bash
-cd public
-now deploy --name my-project
-```
-
-As an alternative, use the [Now desktop client](https://zeit.co/download) and simply drag the unzipped project folder to the taskbar icon.
-
-### With [surge](https://surge.sh/)
-
-Install `surge` if you haven't already:
-
-```bash
-npm install -g surge
-```
-
-Then, from within your project folder:
-
-```bash
-npm run build
-surge public my-project.surge.sh
 ```
