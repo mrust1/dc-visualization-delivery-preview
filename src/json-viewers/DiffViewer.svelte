@@ -11,6 +11,7 @@
 		position: absolute;
 	}
 	.green {
+		position: relative;
 		background: lightgreen;
 	}
 	.red::before {
@@ -18,6 +19,7 @@
 		position: absolute;
 	}
 	.red {
+		position: relative;
 		background: pink;
 	}
 	.grey {
