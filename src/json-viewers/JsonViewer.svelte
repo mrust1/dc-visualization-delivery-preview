@@ -5,8 +5,10 @@
   hljs.registerLanguage("json", json);
   export let content;
 </script>
+{#if content}
 <pre>
   <code class="json">
     {@html hljs.highlight('json', JSON.stringify(content, null, 2), true).value}
   </code>
 </pre>
+{/if}

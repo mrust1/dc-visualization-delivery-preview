@@ -34,6 +34,10 @@
   .realtime {
     grid-area: realtime;
   }
+
+  .grey {
+		color: #777;
+	}
 </style>
 <div />
 <main class="grid-container" style="grid-template-rows: 2.5rem 1fr {$timeout ? '' : $connected ? '10rem' : '3rem'}; grid-template-areas: 'tools' 'code' {$timeout ? '' : '\'realtime\''};">
@@ -41,9 +45,13 @@
     <Menu/>
   </div>
   {#if $selected === 'Realtime' || $selected === 'Staged' || $selected === 'Live'}
+    {#if $mainContent}
     <div class="code">
       <JsonViewer content={$mainContent}/>
     </div>
+    {:else}
+      <p class="grey">Unable to preview - form content invalid.</p>
+    {/if}
   {:else if $selected === 'Diff'}
     <div class="code">
       <Diff/>

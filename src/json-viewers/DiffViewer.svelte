@@ -2,9 +2,14 @@
 	import * as diff from 'diff';
 	export let json1;
 	export let json2;
-	$:diffPatch = diff.diffJson(json2, json1);
+	$:haveContent = json2 && json1;
+	$:diffPatch = haveContent ? diff.diffJson(json2, json1) : [];
 </script>
-<code><pre>{#each diffPatch as patch}<span class={patch.added ? 'green' : patch.removed ? 'red' : 'grey'}>{patch.value}</span>{/each}</pre></code>
+{#if haveContent}
+	<code><pre>{#each diffPatch as patch}<span class={patch.added ? 'green' : patch.removed ? 'red' : 'grey'}>{patch.value}</span>{/each}</pre></code>
+{:else}
+	<p class="grey">Unable to show diff - form content invalid.</p>
+{/if}
 <style>
 	.green::before {
 		content: " +";

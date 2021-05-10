@@ -7,13 +7,21 @@ export const timeout = new writable(false);
 class VisService {
   constructor() {
      this.sdk;
+     this.lastSuccess;
   }
   
   async fetchContent() {
-    return await this.sdk.form.get({
-      format: get(format),
-      depth: get(depth)
-    });
+    let content;
+    try{
+      content = await this.sdk.form.get({
+        format: get(format),
+        depth: get(depth)
+      });
+      this.lastSuccess = content;
+    } catch (e) {
+      content = this.lastSuccess;
+    }
+    return undefined;
   }
 
   async fetchsettings() {
@@ -21,10 +29,10 @@ class VisService {
   }
 
   listenForSave(method) {
-    return this.sdk.form.saved(method, {
+    return this.sdk.form.saved((c) => {this.lastSuccess = c; method(c)}, {
       format: get(format),
       depth: get(depth)
-    });
+    })
   }
 
   listenForLocaleChange(method) {
@@ -48,7 +56,7 @@ class VisService {
   }
 
   listenForChanges(method) {
-    return this.sdk.form.changed(method, {
+    return this.sdk.form.changed((c) => {this.lastSuccess = c; method(c)}, {
       format: get(format),
       depth: get(depth)
     });

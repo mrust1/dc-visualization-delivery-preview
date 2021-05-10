@@ -1,7 +1,6 @@
 import wretch from 'wretch';
 import { get } from 'svelte/store';
 import {id, vse, format, locale, depth, hub} from "../settings/settings.store";
-import * as params from '../settings/urlparams';
 class CDService {
 
   constructor() {
