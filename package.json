@@ -4,7 +4,9 @@
   "scripts": {
     "build": "rollup -c",
     "dev": "rollup -c -w",
-    "start": "sirv public"
+    "start": "sirv public",
+    "lint": "prettier --check \"src/**/*.{js,svelte,html}\" && eslint \"src/**/*.{js,svelte}\"",
+    "format": "prettier --write \"src/**/*.{js,svelte,html}\" && eslint --fix \"src/**/*.{js,svelte}\""
   },
   "devDependencies": {
     "@rollup/plugin-commonjs": "^12.0.0",
@@ -14,7 +16,14 @@
     "rollup-plugin-css-only": "^2.1.0",
     "rollup-plugin-livereload": "^1.0.0",
     "rollup-plugin-svelte": "^5.0.3",
-    "rollup-plugin-terser": "^5.1.2"
+    "rollup-plugin-terser": "^5.1.2",
+    "eslint": "^7.20.0",
+    "husky": "^4.3.8",
+    "eslint-config-prettier": "^8.0.0",
+    "eslint-plugin-svelte3": "^3.1.1",
+    "lint-staged": "^10.5.4",
+    "prettier": "^2.2.1",
+    "prettier-plugin-svelte": "^2.1.6"
   },
   "dependencies": {
     "dc-visualization-sdk": "git+ssh://git@github.com/amplience/dc-visualization-sdk.git#feature/context-change",
@@ -24,5 +33,13 @@
     "svelte-spinner": "^2.0.2",
     "update": "^0.7.4",
     "wretch": "^1.7.2"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "lint-staged": {
+    "*.{js,svelte,html}": "npm run format"
   }
 }
