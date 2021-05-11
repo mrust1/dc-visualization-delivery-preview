@@ -1,19 +1,27 @@
 import { init } from 'dc-visualization-sdk';
 import { writable, get } from 'svelte/store';
-import { depth, format } from "../settings/settings.store";
+import { depth, format } from '../settings/settings.store';
 
 export const connected = new writable(false);
 export const timeout = new writable(false);
 class VisService {
   constructor() {
-     this.sdk;
+    this.sdk;
+    this.lastSuccess;
   }
-  
+
   async fetchContent() {
-    return await this.sdk.form.get({
-      format: get(format),
-      depth: get(depth)
-    });
+    let content;
+    try {
+      content = await this.sdk.form.get({
+        format: get(format),
+        depth: get(depth),
+      });
+      this.lastSuccess = content;
+    } catch (e) {
+      content = this.lastSuccess;
+    }
+    return content;
   }
 
   async fetchsettings() {
@@ -21,10 +29,16 @@ class VisService {
   }
 
   listenForSave(method) {
-    return this.sdk.form.saved(method, {
-      format: get(format),
-      depth: get(depth)
-    });
+    return this.sdk.form.saved(
+      (c) => {
+        this.lastSuccess = c;
+        method(c);
+      },
+      {
+        format: get(format),
+        depth: get(depth),
+      }
+    );
   }
 
   listenForLocaleChange(method) {
@@ -48,26 +62,31 @@ class VisService {
   }
 
   listenForChanges(method) {
-    return this.sdk.form.changed(method, {
-      format: get(format),
-      depth: get(depth)
-    });
+    return this.sdk.form.changed(
+      (c) => {
+        this.lastSuccess = c;
+        method(c);
+      },
+      {
+        format: get(format),
+        depth: get(depth),
+      }
+    );
   }
 
   async connect() {
-    const t = setTimeout(()=>{
+    const t = setTimeout(() => {
       timeout.set(true);
     }, 5000);
-    try{
+    try {
       const sdk = await init();
       this.sdk = sdk;
       connected.set(true);
       clearTimeout(t);
       return true;
-    } catch(e){
+    } catch (e) {
       console.error(e);
     }
-
   }
 }
 

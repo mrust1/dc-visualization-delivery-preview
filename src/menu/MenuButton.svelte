@@ -3,15 +3,17 @@
   export let selected;
 </script>
 
+<div class={selected ? 'selected' : ''}>{tab}</div>
+
 <style>
   div {
-    font-weight:400;
+    font-weight: 400;
     color: rgb(34, 34, 34);
     text-align: center;
     padding: 10px 20px;
     box-sizing: border-box;
     cursor: pointer;
-    height:100%;
+    height: 100%;
   }
 
   div:hover {
@@ -19,11 +21,8 @@
   }
 
   .selected {
-    border-bottom: 2px solid rgb(3,155,229);
+    border-bottom: 2px solid rgb(3, 155, 229);
     color: #039be5;
     font-weight: bold;
   }
 </style>
-
-<div class={selected ? 'selected' : ''}>{tab}</div>
-
