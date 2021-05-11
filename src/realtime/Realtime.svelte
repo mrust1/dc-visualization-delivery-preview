@@ -10,6 +10,9 @@
   let deliveryKey = '';
   let editIcon = '';
   let saveIcon = '';
+  let snapshotId = null;
+  let contentTypeUri = '';
+  let contentItemId = '';
 
   timeout.subscribe(async (t) => {
     if (!t) {
@@ -25,11 +28,22 @@
     visService.sdk.form.saved(() => flash(saveIcon));
     settings = await visService.sdk.settings.get();
     locale.set(await visService.sdk.locale.get());
-    deliveryKey = await visService.sdk.deliveryKey.get();
     device = await visService.sdk.device.get();
+    const context = await visService.sdk.context.get();
+
+    deliveryKey = context.deliveryKey;
+    snapshotId = context.snapshotId;
+    contentItemId = context.contentId;
+    contentTypeUri = context.contentTypeUri;
+
     visService.sdk.device.changed((value) => (device = value));
     visService.sdk.locale.changed((value) => locale.set(value));
-    visService.sdk.deliveryKey.changed((value) => (deliveryKey = value));
+    visService.sdk.context.changed((value) => {
+      deliveryKey = value.deliveryKey;
+      snapshotId = value.snapshotId;
+      contentItemId = value.contentId;
+      contentTypeUri = value.contentTypeUri;
+    });
   });
 
   function flash(element) {
@@ -88,14 +102,13 @@
     <div class="data">
       <div class="vse"><span class="label">vse:</span> {settings.vse}</div>
       <div class="snapshotId">
-        <span class="label">Snapshot Id: </span>{visService.sdk.snapshotId}
+        <span class="label">Snapshot Id: </span>{snapshotId}
       </div>
       <div class="contentItemId">
-        <span class="label">Content Id: </span>{visService.sdk.contentId}
+        <span class="label">Content Id: </span>{contentItemId}
       </div>
       <div class="contentTypeId">
-        <span class="label">Content Type Id: </span>{visService.sdk
-          .contentTypeId}
+        <span class="label">Content Type Uri: </span>{contentTypeUri}
       </div>
       <div class="locale">
         <span class="label">Locale: </span><UpdateAlert data={$locale}
