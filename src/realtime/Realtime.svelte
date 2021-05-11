@@ -10,6 +10,9 @@
   let deliveryKey = '';
   let editIcon = '';
   let saveIcon = '';
+  let snapshotId = null;
+  let contentTypeUri = '';
+  let contentItemId = '';
 
   timeout.subscribe(async (t)=>{
     if (!t) {
@@ -25,11 +28,22 @@
     visService.sdk.form.saved(() => flash(saveIcon));
     settings = await visService.sdk.settings.get();
     locale.set(await visService.sdk.locale.get());
-    deliveryKey = await visService.sdk.deliveryKey.get();
     device = await visService.sdk.device.get();
+    const context = await visService.sdk.context.get();
+
+    deliveryKey = context.deliveryKey;
+    snapshotId = context.snapshotId;
+    contentItemId = context.contentId;
+    contentTypeUri = context.contentTypeUri;
+
     visService.sdk.device.changed( value => device = value);
     visService.sdk.locale.changed( value => locale.set(value));
-    visService.sdk.deliveryKey.changed( value => deliveryKey = value);
+    visService.sdk.context.changed(value => {
+      deliveryKey = value.deliveryKey;
+      snapshotId = value.snapshotId;
+      contentItemId = value.contentId;
+      contentTypeUri = value.contentTypeUri;
+    })
   })
 
 
@@ -162,7 +176,7 @@
         thickness="2"
         gap="40"
       />
-      {/if}    
+      {/if}
     </div>
     <div class="status">{$connected ? 'Connected' : 'Connecting...'}</div>
     <div class="save"><svg bind:this={saveIcon} xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px" fill="white"><path d="M0 0h24v24H0z" fill="none"/><path d="M17 3H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V7l-4-4zm-5 16c-1.66 0-3-1.34-3-3s1.34-3 3-3 3 1.34 3 3-1.34 3-3 3zm3-10H5V5h10v4z"/></svg></div>
@@ -171,9 +185,9 @@
   {#if $connected}
   <div class="data">
     <div class="vse"><span class="label">vse:</span> {settings.vse}</div>
-    <div class="snapshotId"><span class="label">Snapshot Id: </span>{visService.sdk.snapshotId}</div>
-    <div class="contentItemId"><span class="label">Content Id: </span>{visService.sdk.contentId}</div>
-    <div class="contentTypeId"><span class="label">Content Type Id: </span>{visService.sdk.contentTypeId}</div>
+    <div class="snapshotId"><span class="label">Snapshot Id: </span>{snapshotId}</div>
+    <div class="contentItemId"><span class="label">Content Id: </span>{contentItemId}</div>
+    <div class="contentTypeId"><span class="label">Content Type Uri: </span>{contentTypeUri}</div>
     <div class="locale"><span class="label">Locale: </span><UpdateAlert data={$locale}>{$locale}</UpdateAlert></div>
     <div class="deliveryKey"><span class="label">Delivery Key: </span><UpdateAlert data={deliveryKey}>{deliveryKey}</UpdateAlert></div>
     <div class="device"><span class="label">Device: </span><UpdateAlert data={device}>{device.name}<span class="label">({device.width}x{device.height})</span> - {device.orientation}</UpdateAlert></div>

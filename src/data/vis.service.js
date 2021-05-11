@@ -1,18 +1,18 @@
-import { init } from 'dc-visualization-sdk';
-import { writable, get } from 'svelte/store';
+import { init } from "dc-visualization-sdk";
+import { writable, get } from "svelte/store";
 import { depth, format } from "../settings/settings.store";
 
 export const connected = new writable(false);
 export const timeout = new writable(false);
 class VisService {
   constructor() {
-     this.sdk;
+    this.sdk;
   }
-  
+
   async fetchContent() {
     return await this.sdk.form.get({
       format: get(format),
-      depth: get(depth)
+      depth: get(depth),
     });
   }
 
@@ -23,7 +23,7 @@ class VisService {
   listenForSave(method) {
     return this.sdk.form.saved(method, {
       format: get(format),
-      depth: get(depth)
+      depth: get(depth),
     });
   }
 
@@ -50,24 +50,23 @@ class VisService {
   listenForChanges(method) {
     return this.sdk.form.changed(method, {
       format: get(format),
-      depth: get(depth)
+      depth: get(depth),
     });
   }
 
   async connect() {
-    const t = setTimeout(()=>{
+    const t = setTimeout(() => {
       timeout.set(true);
     }, 5000);
-    try{
+    try {
       const sdk = await init();
       this.sdk = sdk;
       connected.set(true);
       clearTimeout(t);
       return true;
-    } catch(e){
+    } catch (e) {
       console.error(e);
     }
-
   }
 }
 
