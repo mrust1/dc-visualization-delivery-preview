@@ -9,7 +9,7 @@ To use this visualization app it first needs to be added to a content type insid
 ### Capabilities
   <p>The capabilities of this app depend on the URL parameters supplied.</p>
   
-  * `id` - This Content Item ID, usually {{content.sys.id}}. Required for staging, live and diff tab.
+  * `id` - The Content Item ID, usually {{content.sys.id}}. Required for staging, live and diff tab.
   * `vse` - Your virtual staging environment, usually {{vse.domain}}. Required for staging tab.
   * `hub` - Your hub name, required for live tab.
   * `realtime` - Realtime flag, required for Realtime tab, should be true.
