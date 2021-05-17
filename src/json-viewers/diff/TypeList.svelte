@@ -1,6 +1,6 @@
 <script>
   import { createEventDispatcher } from 'svelte';
-  import { options } from '../menu/menu.store';
+  import { options } from '../../menu/menu.store';
   export let pos = { x: 0, y: 0 };
   const dispatch = createEventDispatcher();
 </script>

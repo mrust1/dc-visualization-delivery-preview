@@ -4,9 +4,10 @@
   import { selected } from './menu/menu.store';
   import JsonViewer from './json-viewers/JsonViewer.svelte';
   import Help from './Help.svelte';
-  import Diff from './json-viewers/Diff.svelte';
+  import Diff from './json-viewers/diff/Diff.svelte';
   import Realtime from './realtime/Realtime.svelte';
   import Menu from './menu/Menu.svelte';
+  import { SvelteToast } from '@zerodevx/svelte-toast';
 </script>
 
 <div />
@@ -20,6 +21,7 @@
     ? ''
     : "'realtime'"};"
 >
+  <SvelteToast />
   <div class="tools">
     <Menu />
   </div>
@@ -28,8 +30,6 @@
       <div class="code">
         <JsonViewer content={$mainContent} />
       </div>
-    {:else}
-      <p class="grey">Unable to preview - form content invalid.</p>
     {/if}
   {:else if $selected === 'Diff'}
     <div class="code">

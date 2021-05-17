@@ -27,7 +27,7 @@
   <p>The capabilities of this app depend on the URL parameters supplied.</p>
   <ul>
     <li>
-      <code>id</code> - This Content Item ID, usually &lbrace;&lbrace;content.sys.id&rbrace;&rbrace;.
+      <code>id</code> - The Content Item ID, usually &lbrace;&lbrace;content.sys.id&rbrace;&rbrace;.
       Required for staging, live and diff view.
     </li>
     <li>

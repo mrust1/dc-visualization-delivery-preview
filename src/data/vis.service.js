@@ -1,6 +1,7 @@
 import { init } from 'dc-visualization-sdk';
 import { writable, get } from 'svelte/store';
 import { depth, format } from '../settings/settings.store';
+import { toast } from '@zerodevx/svelte-toast';
 
 export const connected = new writable(false);
 export const timeout = new writable(false);
@@ -19,7 +20,13 @@ class VisService {
       });
       this.lastSuccess = content;
     } catch (e) {
-      content = this.lastSuccess;
+      content = this.lastSuccess || {};
+      toast.push(e.errors[0].message, {
+        duration: 2500, theme: {
+          '--toastBackground': '#F56565',
+          '--toastProgressBackground': '#C53030'
+        }
+      });
     }
     return content;
   }

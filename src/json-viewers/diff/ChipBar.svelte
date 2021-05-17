@@ -2,7 +2,7 @@
   export const title = '';
   import Chip from './Chip.svelte';
   import TypeList from './TypeList.svelte';
-  import { base, compare } from '../data/data.service';
+  import { base, compare } from '../../data/data.service';
   let baseElement;
   let compareElement;
   let showList = false;
