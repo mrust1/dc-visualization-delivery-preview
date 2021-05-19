@@ -1,14 +1,48 @@
 <script>
-  import { mainContent} from './data/data.service';
+  import { mainContent } from './data/data.service';
   import { connected, timeout } from './data/vis.service';
   import { selected } from './menu/menu.store';
-  import JsonViewer from "./json-viewers/JsonViewer.svelte";
-  import Help from "./Help.svelte";
-  import Diff from "./json-viewers/Diff.svelte";
-  import Realtime from "./realtime/Realtime.svelte";
-  import Menu from "./menu/Menu.svelte";
-  
+  import JsonViewer from './json-viewers/JsonViewer.svelte';
+  import Help from './Help.svelte';
+  import Diff from './json-viewers/diff/Diff.svelte';
+  import Realtime from './realtime/Realtime.svelte';
+  import Menu from './menu/Menu.svelte';
+  import { SvelteToast } from '@zerodevx/svelte-toast';
 </script>
+
+<div />
+<main
+  class="grid-container"
+  style="grid-template-rows: 2.5rem 1fr {$timeout
+    ? ''
+    : $connected
+    ? '10rem'
+    : '3rem'}; grid-template-areas: 'tools' 'code' {$timeout
+    ? ''
+    : "'realtime'"};"
+>
+  <SvelteToast />
+  <div class="tools">
+    <Menu />
+  </div>
+  {#if $selected === 'Realtime' || $selected === 'Staged' || $selected === 'Live'}
+    {#if $mainContent}
+      <div class="code">
+        <JsonViewer content={$mainContent} />
+      </div>
+    {/if}
+  {:else if $selected === 'Diff'}
+    <div class="code">
+      <Diff />
+    </div>
+  {:else if $selected === 'help'}
+    <Help />
+  {/if}
+
+  <div class="realtime" style="display:{$timeout ? 'none' : ''}">
+    <Realtime />
+  </div>
+</main>
 
 <style>
   main {
@@ -23,7 +57,6 @@
 
   .tools {
     grid-area: tools;
-    
   }
 
   .code {
@@ -34,25 +67,8 @@
   .realtime {
     grid-area: realtime;
   }
-</style>
-<div />
-<main class="grid-container" style="grid-template-rows: 2.5rem 1fr {$timeout ? '' : $connected ? '10rem' : '3rem'}; grid-template-areas: 'tools' 'code' {$timeout ? '' : '\'realtime\''};">
-  <div class="tools">
-    <Menu/>
-  </div>
-  {#if $selected === 'Realtime' || $selected === 'Staged' || $selected === 'Live'}
-    <div class="code">
-      <JsonViewer content={$mainContent}/>
-    </div>
-  {:else if $selected === 'Diff'}
-    <div class="code">
-      <Diff/>
-    </div>
-  {:else if $selected === 'help'}
-    <Help/>
-  {/if}
 
-  <div class="realtime" style="display:{$timeout ? 'none' : ''}">
-    <Realtime />
-  </div>
-</main>
+  .grey {
+    color: #777;
+  }
+</style>

@@ -1,24 +1,24 @@
 import { writable, get, derived } from 'svelte/store';
-import { vse, id, hub} from "../settings/urlparams";
-import { connected } from "../data/vis.service.js";
+import { vse, id, hub } from '../settings/urlparams';
+import { connected } from '../data/vis.service.js';
 
 let defaultTabs = [];
 
-if(canFetchStaged()) {
+if (canFetchStaged()) {
   defaultTabs.push('Staged');
 }
 
-if(canFetchPublished()) {
+if (canFetchPublished()) {
   defaultTabs.push('Live');
 }
 
-if(canFetchStaged() && canFetchPublished()) {
+if (canFetchStaged() && canFetchPublished()) {
   defaultTabs.push('Diff');
 }
 
 export let selected = writable('');
 
-let defaultTab = setTimeout(()=>{
+let defaultTab = setTimeout(() => {
   selected.set(defaultTabs[0] || 'help');
 }, 500);
 
@@ -43,18 +43,24 @@ function enableRealtime() {
   selected.set('Realtime');
 }
 
-connected.subscribe((c)=>{
-  if(!c) {
+connected.subscribe((c) => {
+  if (!c) {
     return;
   }
   enableRealtime();
-})
+});
 
-export const options = derived(tabs, ($tabs) => {
-	return $tabs.map((val)=>{
-    let l = val.toLowerCase()
-    if(l === 'realtime' || l === 'live' || l === 'staged') {
-      return l;
-    }
-  }).filter(item => item);
-}, []);
+export const options = derived(
+  tabs,
+  ($tabs) => {
+    return $tabs
+      .map((val) => {
+        let l = val.toLowerCase();
+        if (l === 'realtime' || l === 'live' || l === 'staged') {
+          return l;
+        }
+      })
+      .filter((item) => item);
+  },
+  []
+);
