@@ -1,7 +1,7 @@
 # dc-visualization-delivery-preview
 
 To use this visualization app it first needs to be added to a content type inside DC. It has a number of functions:
-  * **Realtime** - This displays the in-progress content, even if it hasn't yet been saved. **Note:** all required fields need to be filled and valid for this to update.
+  * **Realtime** - This displays the in-progress content, even if it hasn't yet been saved.
   * **Staged** - This displays the latest version of your saved content.
   * **Live** - This displays the published version of your content.
   * **Diff** - This tab displays the difference between the available tabs.
@@ -13,7 +13,7 @@ To use this visualization app it first needs to be added to a content type insid
   * `vse` - Your virtual staging environment, usually {{vse.domain}}. Required for staging tab.
   * `hub` - Your hub name, required for live tab.
   * `realtime` - Realtime flag, required for Realtime tab, should be true.
-  * `locale` - The locale to use, usually {{locales}}. Optional: if not used the realtime locale switching will be faster, but there will be no locale filtering for Staging and Live tabs.
+  * `locale` - The locale to use, usually {{locales}}. This is not needed when using a realtime connection.
   
 ### Options
   <p>The following options can be used to configure the default Delivery API request options:</p>
@@ -22,7 +22,7 @@ To use this visualization app it first needs to be added to a content type insid
   * `depth` - Can either be `root` or `all` (default).
   
   <h2>Example URL to use</h2>
-http://localhost:5000?id={{content.sys.id}}&vse={{vse.domain}}&locale={{locales}}&hub=your-hub&realtime=true
+http://localhost:3400?id={{content.sys.id}}&vse={{vse.domain}}&locale={{locales}}&hub=your-hub&realtime=true
 
 ## Get started
 
@@ -36,7 +36,7 @@ npm install
 npm run dev
 ```
 
-Navigate to [localhost:5000](http://localhost:5000). You should see your app running. 
+Navigate to [localhost:3400](http://localhost:3400). You should see your app running. 
 
 ## Building and running in production mode
 

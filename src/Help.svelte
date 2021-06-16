@@ -11,9 +11,8 @@
   </p>
   <ul>
     <li>
-      <b>Realtime</b> - This will show the in-progress content, even if it
-      hasn't yet been saved. <b>Note:</b> all required fields need to be filled and
-      valid for this to show.
+      <b>Realtime</b> - This will show the in-progress content, even if it hasn't
+      yet been saved.
     </li>
     <li>
       <b>Staged</b> - This shows the latest version of your saved content.
@@ -41,8 +40,7 @@
     </li>
     <li>
       <code>locale</code> - The locale to use, usually &lbrace;&lbrace;locales&rbrace;&rbrace;.
-      Optional: if not used the realtime locale switching will be faster, but there
-      will be no locale filtering for Staging and Live tabs.
+      This is not needed when using a realtime connection.
     </li>
   </ul>
   <h2>Options</h2>
@@ -73,6 +71,7 @@
 <style>
   main {
     padding: 0 2rem;
+    overflow-y: auto;
   }
   button {
     display: inline-block;
