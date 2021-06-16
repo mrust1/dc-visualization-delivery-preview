@@ -2,7 +2,7 @@ import { writable, get } from 'svelte/store';
 import { cdService } from './cd.service.js';
 import { visService, connected } from './vis.service.js';
 import { selected } from '../menu/menu.store';
-import { depth, hub, format } from '../settings/settings.store';
+import { depth, hub, format, locale } from '../settings/settings.store';
 export let mainContent = writable();
 export let secondaryContent = writable();
 export let base = writable('live');
@@ -134,6 +134,7 @@ const update = async () => {
 };
 
 selected.subscribe(update);
+locale.subscribe(update);
 depth.subscribe(update);
 hub.subscribe(update);
 format.subscribe(update);
