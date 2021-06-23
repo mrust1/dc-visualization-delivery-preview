@@ -67,8 +67,4 @@
   .realtime {
     grid-area: realtime;
   }
-
-  .grey {
-    color: #777;
-  }
 </style>

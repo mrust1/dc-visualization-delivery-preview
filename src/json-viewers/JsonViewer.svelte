@@ -9,7 +9,7 @@
 {#if content}
   <pre>
   <code class="json">
-    {@html hljs.highlight('json', JSON.stringify(content, null, 2), true).value}
+    {@html hljs.highlight(JSON.stringify(content, null, 2), {language: 'json', ignoreIllegals: true}).value}
   </code>
 </pre>
 {/if}

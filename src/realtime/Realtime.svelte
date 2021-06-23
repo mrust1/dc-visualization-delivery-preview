@@ -24,7 +24,7 @@
     if (!c) {
       return;
     }
-    visService.sdk.form.changed(() => flash(editIcon));
+    visService.sdk.form.changed(() => flash(editIcon), { allowInvalid: true });
     visService.sdk.form.saved(() => flash(saveIcon));
     settings = await visService.sdk.settings.get();
     locale.set(await visService.sdk.locale.get());

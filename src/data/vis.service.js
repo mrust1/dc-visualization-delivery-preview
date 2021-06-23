@@ -17,15 +17,17 @@ class VisService {
       content = await this.sdk.form.get({
         format: get(format),
         depth: get(depth),
+        allowInvalid: true,
       });
       this.lastSuccess = content;
     } catch (e) {
       content = this.lastSuccess || {};
       toast.push(e.errors[0].message, {
-        duration: 2500, theme: {
+        duration: 2500,
+        theme: {
           '--toastBackground': '#F56565',
-          '--toastProgressBackground': '#C53030'
-        }
+          '--toastProgressBackground': '#C53030',
+        },
       });
     }
     return content;
@@ -77,6 +79,7 @@ class VisService {
       {
         format: get(format),
         depth: get(depth),
+        allowInvalid: true,
       }
     );
   }
