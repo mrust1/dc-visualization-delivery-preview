@@ -14,6 +14,9 @@
     box-sizing: border-box;
     cursor: pointer;
     height: 100%;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
   }
 
   div:hover {
