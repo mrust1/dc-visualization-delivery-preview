@@ -1,19 +1,19 @@
 # dc-visualization-delivery-preview
 
 To use this visualization app it first needs to be added to a content type inside DC. It has a number of functions:
-  * **Realtime** - This displays the in-progress content, even if it hasn't yet been saved.
-  * **Staged** - This displays the latest version of your saved content.
-  * **Live** - This displays the published version of your content.
-  * **Diff** - This tab displays the difference between the available tabs.
+  * **Realtime** - Displays the in-progress content. It does not require the content item to be saved.
+  * **Staged** - Displays the latest version of your saved content.
+  * **Live** - Displays the published version of your content.
+  * **Diff** - Displays the difference between the different versions above.
 ## Url Params
 ### Capabilities
   <p>The capabilities of this app depend on the URL parameters supplied.</p>
   
-  * `id` - The Content Item ID, usually {{content.sys.id}}. Required for staging, live and diff tab.
-  * `vse` - Your virtual staging environment, usually {{vse.domain}}. Required for staging tab.
-  * `hub` - Your hub name, required for live tab.
-  * `realtime` - Realtime flag, required for Realtime tab, should be true.
-  * `locale` - The locale to use, usually {{locales}}. This is not needed when using a realtime connection.
+  * `id` - The Content Item ID {{content.sys.id}}. Required for staging, live and diff tabs.
+  * `vse` - Your virtual staging environment {{vse.domain}}. Required for the staging tab.
+  * `hub` - Your hub name {{hub.name}}. Required for the live tab.
+  * `realtime` - Realtime flag. Required for Realtime tab, should be set to true.
+  * `locale` - The locale to use {{locales}}. This is not needed when using a realtime connection and exluding this will prevent unnecessary reloading.
   
 ### Options
   <p>The following options can be used to configure the default Delivery API request options:</p>
@@ -22,7 +22,7 @@ To use this visualization app it first needs to be added to a content type insid
   * `depth` - Can either be `root` or `all` (default).
   
   <h2>Example URL to use</h2>
-http://localhost:3400?id={{content.sys.id}}&vse={{vse.domain}}&locale={{locales}}&hub=your-hub&realtime=true
+http://localhost:3400?id={{content.sys.id}}&vse={{vse.domain}}&hub={{hub.name}}&realtime=true
 
 ## Get started
 

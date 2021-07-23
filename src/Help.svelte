@@ -11,36 +11,40 @@
   </p>
   <ul>
     <li>
-      <b>Realtime</b> - This will show the in-progress content, even if it hasn't
-      yet been saved.
+      <b>Realtime</b> - Displays the in-progress content. It does not require the
+      content item to be saved.
     </li>
     <li>
-      <b>Staged</b> - This shows the latest version of your saved content.
+      <b>Staged</b> - Displays the latest version of your saved content.
     </li>
-    <li><b>Live</b> - This shows the published version of your content.</li>
+    <li><b>Live</b> - Displays the published version of your content.</li>
     <li>
-      <b>Diff</b> - This lets you see the difference between all the different content.
+      <b>Diff</b> - Displays the difference between the different versions above.
     </li>
   </ul>
   <h2>Url Params</h2>
   <p>The capabilities of this app depend on the URL parameters supplied.</p>
   <ul>
     <li>
-      <code>id</code> - The Content Item ID, usually &lbrace;&lbrace;content.sys.id&rbrace;&rbrace;.
-      Required for staging, live and diff view.
+      <code>id</code> - The Content Item ID &lbrace;&lbrace;content.sys.id&rbrace;&rbrace;.
+      Required for staging, live and diff tabs.
     </li>
     <li>
-      <code>vse</code> - Your virtual staging environment, usually &lbrace;&lbrace;vse.domain&rbrace;&rbrace;.
-      Required for staging view.
-    </li>
-    <li><code>hub</code> - Your hub name, required for live view.</li>
-    <li>
-      <code>realtime</code> - Realtime flag, required for real-time view, should
-      be true.
+      <code>vse</code> - Your virtual staging environment &lbrace;&lbrace;vse.domain&rbrace;&rbrace;.
+      Required for the staging tab.
     </li>
     <li>
-      <code>locale</code> - The locale to use, usually &lbrace;&lbrace;locales&rbrace;&rbrace;.
-      This is not needed when using a realtime connection.
+      <code>hub</code> - Your hub name &lbrace;&lbrace;hub.name&rbrace;&rbrace;.
+      Required for the live tab.
+    </li>
+    <li>
+      <code>realtime</code> - Realtime flag. Required for Realtime tab, should be
+      set to true.
+    </li>
+    <li>
+      <code>locale</code> - The locale to use &lbrace;&lbrace;locales&rbrace;&rbrace;.
+      This is not needed when using a realtime connection and exluding this will
+      prevent unnecessary reloading.
     </li>
   </ul>
   <h2>Options</h2>
@@ -61,9 +65,7 @@
   <div>
     <code bind:this={element} style="text-decoration: underline;"
       >{window.location
-        .origin}?id=&lbrace;&lbrace;content.sys.id&rbrace;&rbrace;&vse=&lbrace;&lbrace;vse.domain&rbrace;&rbrace;&locale=&lbrace;&lbrace;locales&rbrace;&rbrace;&hub=<b
-        >your-hub</b
-      >&realtime=true</code
+        .origin}?id=&lbrace;&lbrace;content.sys.id&rbrace;&rbrace;&vse=&lbrace;&lbrace;vse.domain&rbrace;&rbrace;&hub=&lbrace;&lbrace;hub.name&rbrace;&rbrace;&realtime=true</code
     ><button on:click={() => copy(element)}>copy</button>
   </div>
 </main>
