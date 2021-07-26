@@ -1,6 +1,6 @@
 {
   "name": "dc-visualization-delivery-preview",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "scripts": {
     "build": "rollup -c",
     "dev": "rollup -c -w",
