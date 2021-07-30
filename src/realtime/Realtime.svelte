@@ -215,6 +215,7 @@
     align-self: center;
     color: #444;
     font-family: monospace;
+    word-break: break-all;
   }
   .label {
     color: #888;
