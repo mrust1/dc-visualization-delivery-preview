@@ -4,17 +4,12 @@ import { connected } from '../data/vis.service.js';
 
 let defaultTabs = [];
 
-if (canFetchStaged()) {
-  defaultTabs.push('Staged');
-}
 
 if (canFetchPublished()) {
   defaultTabs.push('Live');
 }
 
-if (canFetchStaged() && canFetchPublished()) {
-  defaultTabs.push('Diff');
-}
+
 
 export let selected = writable('');
 
