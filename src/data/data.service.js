@@ -1,5 +1,4 @@
 import { writable, get } from 'svelte/store';
-import { cdService } from './cd.service.js';
 import { visService } from './vis.service.js';
 import { selected } from '../menu/menu.store';
 import { depth, hub, format, locale } from '../settings/settings.store';
@@ -23,26 +22,6 @@ export const visData = async () => {
   });
   var result = await visService.fetchContent();
   return mainContent.set(result);
-};
-
-export const loadData = async (live) => {
-  let val;
-  try {
-    val = await cdService.fetchContent(live);
-    console.log('val : ', val);
-    return val;
-  } catch (e) {
-    try {
-      val = JSON.parse(e.message);
-    } catch (b) {
-      val = {
-        error: {
-          message: e.message,
-        },
-      };
-    }
-    return val;
-  }
 };
 
 const update = async () => {

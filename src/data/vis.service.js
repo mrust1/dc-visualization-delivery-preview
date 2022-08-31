@@ -15,8 +15,8 @@ class VisService {
     let content;
     try {
       content = await this.sdk.form.get({
-        format: get(format),
-        depth: get(depth),
+        format: 'inlined',
+        depth: 'all',
         allowInvalid: true,
       });
       console.log('fetchContent : ', content);
@@ -36,6 +36,7 @@ class VisService {
   }
 
   async fetchsettings() {
+    console.log('fetchsettings ');
     return await this.sdk.settings.get();
   }
 
@@ -47,8 +48,8 @@ class VisService {
         method(c);
       },
       {
-        format: get(format),
-        depth: get(depth),
+        format: 'inlined',
+        depth: 'all',
       }
     );
   }
@@ -59,16 +60,13 @@ class VisService {
   }
 
   async fetchLocale() {
+    console.log('fetchLocale - ');
     return await this.sdk.locale.get();
   }
 
   listenForSettingsChanges(method) {
     console.log('listenForSettingsChanges : ', method);
     return this.sdk.settings.changed(method);
-  }
-
-  async fetchlocale() {
-    return await this.sdk.locale.get();
   }
 
   listenForLocaleChanges(method) {
@@ -81,6 +79,7 @@ class VisService {
     return this.sdk.form.changed(
       (c) => {
         this.lastSuccess = c;
+        console.log('listenForChanges 2  -- : ', c);
         method(c);
       },
       {
