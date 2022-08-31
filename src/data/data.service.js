@@ -6,9 +6,7 @@ export let mainContent = writable();
 export let base = writable('live');
 export let options = writable(['realtime']);
 let unsubscribe;
-let unsubSettings;
-let unsubSave;
-let unsubLocale;
+
 let clearAll = [];
 
 visService.connect();
@@ -26,15 +24,6 @@ const update = async () => {
   const s = get(selected);
   if (unsubscribe) {
     unsubscribe();
-  }
-  if (unsubSettings) {
-    unsubSettings();
-  }
-  if (unsubSave) {
-    unsubSave();
-  }
-  if (unsubLocale) {
-    unsubLocale();
   }
 
   clearAll.forEach((item) => item());
