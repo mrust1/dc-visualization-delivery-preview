@@ -16,20 +16,10 @@ let clearAll = [];
 
 visService.connect();
 
-export const stagedData = async () => {
-  if (get(connected)) {
-    unsubSave = visService.listenForSave(async () => {
-      mainContent.set(await loadData());
-    });
-    unsubLocale = visService.listenForLocaleChange(async () => {
-      mainContent.set(await loadData());
-    });
-  }
-  return mainContent.set(await loadData());
-};
 
 export const visData = async () => {
   unsubscribe = visService.listenForChanges((change) => {
+    console.log("change" , change);
     mainContent.set(change);
   });
   return mainContent.set(await visService.fetchContent());
@@ -72,10 +62,11 @@ const update = async () => {
 
   clearAll.forEach((item) => item());
   clearAll = [];
-
+/*
   if (s === 'Live') {
     mainContent.set(await loadData(true));
-  } else if (s === 'Realtime') {
+  }  else */
+   if (s === 'Realtime') {
     visData();
   }
 };
