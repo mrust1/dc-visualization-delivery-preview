@@ -8,10 +8,7 @@ export let compare = writable();
 export let base = writable();
 export let options = writable(['realtime']);
 let unsubscribe;
-let clearAll = [];
-
 visService.connect();
-
 export const visData = async () => {
   unsubscribe = visService.listenForChanges((change) => {
     console.log('change', change);
@@ -20,19 +17,11 @@ export const visData = async () => {
   var result = await visService.fetchContent();
   return mainContent.set(result);
 };
-
 const update = async () => {
   const s = get(selected);
   if (unsubscribe) {
     unsubscribe();
   }
-
-  clearAll.forEach((item) => item());
-  clearAll = [];
-  /*
-  if (s === 'Live') {
-    mainContent.set(await loadData(true));
-  }  else */
   if (s === 'Realtime') {
     visData();
   }
