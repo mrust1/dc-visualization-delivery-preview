@@ -7,7 +7,9 @@ export let secondaryContent = writable();
 export let compare = writable();
 export let base = writable();
 export let options = writable(['realtime']);
+
 let unsubscribe;
+
 visService.connect();
 export const visData = async () => {
   unsubscribe = visService.listenForChanges((change) => {

@@ -1,7 +1,8 @@
 import { init } from 'dc-visualization-sdk';
+import { writable } from 'svelte/store';
 
-export const connected = false;
-export const timeout = false;
+export const connected = new writable(false);
+export const timeout = new writable(false);
 class VisService {
   constructor() {
     this.sdk;
