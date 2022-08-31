@@ -1,12 +1,11 @@
 import { writable, get } from 'svelte/store';
 import { visService } from './vis.service.js';
 import { selected } from '../menu/menu.store';
-import { depth, hub, format, locale } from '../settings/settings.store';
 export let mainContent = writable();
 export let data = writable();
 export let secondaryContent = writable();
 export let compare = writable();
-export let base = writable('live');
+export let base = writable();
 export let options = writable(['realtime']);
 let unsubscribe;
 let clearAll = [];
@@ -40,8 +39,4 @@ const update = async () => {
 };
 
 selected.subscribe(update);
-locale.subscribe(update);
-depth.subscribe(update);
-hub.subscribe(update);
-format.subscribe(update);
 base.subscribe(update);
