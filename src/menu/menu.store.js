@@ -19,12 +19,9 @@ function enableRealtime() {
   selected.set('Realtime');
 }
 
-connected.subscribe((c) => {
-  if (!c) {
-    return;
-  }
+if (connected) {
   enableRealtime();
-});
+}
 
 export const options = derived(
   tabs,
