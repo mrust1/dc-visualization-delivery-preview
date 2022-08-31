@@ -30,9 +30,6 @@ function canFetchPublished() {
 function enableRealtime() {
   clearTimeout(defaultTab);
   let t = get(tabs);
-  if (t.indexOf('Diff') === -1 && (canFetchStaged() || canFetchPublished())) {
-    t.push('Diff');
-  }
   t.unshift('Realtime');
   tabs.set(t);
   selected.set('Realtime');
