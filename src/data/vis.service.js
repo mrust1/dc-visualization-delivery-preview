@@ -1,9 +1,7 @@
 import { init } from 'dc-visualization-sdk';
-import { writable } from 'svelte/store';
-import { toast } from '@zerodevx/svelte-toast';
 
-export const connected = new writable(false);
-export const timeout = new writable(false);
+export const connected = false;
+export const timeout = false;
 class VisService {
   constructor() {
     this.sdk;
@@ -22,13 +20,7 @@ class VisService {
       this.lastSuccess = content;
     } catch (e) {
       content = this.lastSuccess || {};
-      toast.push(e.errors[0].message, {
-        duration: 2500,
-        theme: {
-          '--toastBackground': '#F56565',
-          '--toastProgressBackground': '#C53030',
-        },
-      });
+      console.error(e);
     }
     console.log('fetchContent2   : ', content);
     return content;
