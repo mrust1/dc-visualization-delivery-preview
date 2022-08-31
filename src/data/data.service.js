@@ -4,6 +4,8 @@ import { selected } from '../menu/menu.store';
 import { depth, hub, format, locale } from '../settings/settings.store';
 export let mainContent = writable();
 export let data = writable();
+export let secondaryContent = writable();
+export let compare = writable();
 export let base = writable('live');
 export let options = writable(['realtime']);
 let unsubscribe;
