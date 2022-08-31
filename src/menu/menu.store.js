@@ -56,7 +56,7 @@ export const options = derived(
     return $tabs
       .map((val) => {
         let l = val.toLowerCase();
-        if (l === 'realtime' || l === 'live' || l === 'staged') {
+        if (l === 'realtime') {
           return l;
         }
       })

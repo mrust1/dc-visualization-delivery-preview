@@ -37,6 +37,7 @@ class CDService {
     if (get(id) === '{{content.sys.id}}' || get(id) === undefined) {
       throw new Error('no content item');
     }
+    console.log(this.constructFullPath(live))
     let content = await wretch(this.constructFullPath(live)).get().json();
     return content;
   }

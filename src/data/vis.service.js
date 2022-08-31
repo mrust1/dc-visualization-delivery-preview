@@ -31,6 +31,7 @@ class VisService {
         },
       });
     }
+    console.log("fetchContent2   : ",content);
     return content;
   }
 
@@ -39,7 +40,7 @@ class VisService {
   }
 
   listenForSave(method) {
-    console.log("listenForSave : ",content);
+    console.log("listenForSave : ",method);
     return this.sdk.form.saved(
       (c) => {
         this.lastSuccess = c;
@@ -53,7 +54,7 @@ class VisService {
   }
 
   listenForLocaleChange(method) {
-    console.log("listenForLocaleChange : ",content);
+    console.log("listenForLocaleChange : ",method);
     return this.sdk.locale.changed(method);
   }
 
@@ -62,7 +63,7 @@ class VisService {
   }
 
   listenForSettingsChanges(method) {
-    console.log("listenForSettingsChanges : ",content);
+    console.log("listenForSettingsChanges : ",method);
     return this.sdk.settings.changed(method);
   }
 
@@ -71,12 +72,12 @@ class VisService {
   }
 
   listenForLocaleChanges(method) {
-    console.log("listenForLocaleChanges 2 : ",content);
+    console.log("listenForLocaleChanges 2 : ",method);
     return this.sdk.locale.changed(method);
   }
 
   listenForChanges(method) {
-    console.log("listenForChanges 2 : ",content);
+    console.log("listenForChanges 2 : ",method);
     return this.sdk.form.changed(
       (c) => {
         this.lastSuccess = c;
