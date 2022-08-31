@@ -1,6 +1,5 @@
 import { init } from 'dc-visualization-sdk';
-import { writable, get } from 'svelte/store';
-import { depth, format } from '../settings/settings.store';
+import { writable } from 'svelte/store';
 import { toast } from '@zerodevx/svelte-toast';
 
 export const connected = new writable(false);
@@ -83,8 +82,8 @@ class VisService {
         method(c);
       },
       {
-        format: get(format),
-        depth: get(depth),
+        format: 'inlined',
+        depth: 'all',
         allowInvalid: true,
       }
     );
