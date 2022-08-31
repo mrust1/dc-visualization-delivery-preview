@@ -19,6 +19,7 @@ class VisService {
         depth: get(depth),
         allowInvalid: true,
       });
+      console.log("fetchContent : ",content);
       this.lastSuccess = content;
     } catch (e) {
       content = this.lastSuccess || {};
@@ -38,6 +39,7 @@ class VisService {
   }
 
   listenForSave(method) {
+    console.log("listenForSave : ",content);
     return this.sdk.form.saved(
       (c) => {
         this.lastSuccess = c;
@@ -51,6 +53,7 @@ class VisService {
   }
 
   listenForLocaleChange(method) {
+    console.log("listenForLocaleChange : ",content);
     return this.sdk.locale.changed(method);
   }
 
@@ -59,6 +62,7 @@ class VisService {
   }
 
   listenForSettingsChanges(method) {
+    console.log("listenForSettingsChanges : ",content);
     return this.sdk.settings.changed(method);
   }
 
@@ -67,10 +71,12 @@ class VisService {
   }
 
   listenForLocaleChanges(method) {
+    console.log("listenForLocaleChanges 2 : ",content);
     return this.sdk.locale.changed(method);
   }
 
   listenForChanges(method) {
+    console.log("listenForChanges 2 : ",content);
     return this.sdk.form.changed(
       (c) => {
         this.lastSuccess = c;
@@ -91,6 +97,7 @@ class VisService {
     try {
       const sdk = await init();
       this.sdk = sdk;
+      console.log("connect : sdk : ",sdk)
       connected.set(true);
       clearTimeout(t);
       return true;

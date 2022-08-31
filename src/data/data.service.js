@@ -39,6 +39,7 @@ export const loadData = async (live) => {
   let val;
   try {
     val = await cdService.fetchContent(live);
+    console.log("val : ", val);
     return val;
   } catch (e) {
     try {
@@ -74,62 +75,8 @@ const update = async () => {
 
   if (s === 'Live') {
     mainContent.set(await loadData(true));
-  } else if (s === 'Staged') {
-    stagedData();
   } else if (s === 'Realtime') {
     visData();
-  } else if (s === 'Diff') {
-    switch (get(compare)) {
-      case 'live':
-        mainContent.set(await loadData(true));
-        break;
-      case 'staged':
-        mainContent.set(await loadData());
-        if (get(connected)) {
-          clearAll.push(
-            visService.listenForSave(async () => {
-              mainContent.set(await loadData());
-            })
-          );
-        }
-        break;
-      case 'realtime':
-        mainContent.set(await visService.fetchContent());
-        if (get(connected)) {
-          clearAll.push(
-            visService.listenForChanges((change) => {
-              mainContent.set(change);
-            })
-          );
-        }
-        break;
-    }
-
-    switch (get(base)) {
-      case 'live':
-        secondaryContent.set(await loadData(true));
-        break;
-      case 'staged':
-        secondaryContent.set(await loadData());
-        if (get(connected)) {
-          clearAll.push(
-            visService.listenForSave(async () => {
-              secondaryContent.set(await loadData());
-            })
-          );
-        }
-        break;
-      case 'realtime':
-        secondaryContent.set(await visService.fetchContent());
-        if (get(connected)) {
-          clearAll.push(
-            visService.listenForChanges((change) => {
-              secondaryContent.set(change);
-            })
-          );
-        }
-        break;
-    }
   }
 };
 
