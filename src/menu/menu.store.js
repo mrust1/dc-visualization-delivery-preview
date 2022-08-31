@@ -5,12 +5,6 @@ import { connected } from '../data/vis.service.js';
 let defaultTabs = [];
 
 
-if (canFetchPublished()) {
-  defaultTabs.push('Live');
-}
-
-
-
 export let selected = writable('');
 
 let defaultTab = setTimeout(() => {
