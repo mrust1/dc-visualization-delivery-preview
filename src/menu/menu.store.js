@@ -1,9 +1,7 @@
 import { writable, get, derived } from 'svelte/store';
-import { vse, id, hub } from '../settings/urlparams';
 import { connected } from '../data/vis.service.js';
 
 let defaultTabs = [];
-
 
 export let selected = writable('');
 
@@ -12,14 +10,6 @@ let defaultTab = setTimeout(() => {
 }, 500);
 
 export let tabs = writable(defaultTabs);
-
-function canFetchStaged() {
-  return vse && id;
-}
-
-function canFetchPublished() {
-  return hub && id;
-}
 
 function enableRealtime() {
   clearTimeout(defaultTab);

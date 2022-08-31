@@ -1,6 +1,6 @@
 import { writable, get } from 'svelte/store';
 import { cdService } from './cd.service.js';
-import { visService, connected } from './vis.service.js';
+import { visService } from './vis.service.js';
 import { selected } from '../menu/menu.store';
 import { depth, hub, format, locale } from '../settings/settings.store';
 export let mainContent = writable();
@@ -16,20 +16,20 @@ let clearAll = [];
 
 visService.connect();
 
-
 export const visData = async () => {
   unsubscribe = visService.listenForChanges((change) => {
-    console.log("change" , change);
+    console.log('change', change);
     mainContent.set(change);
   });
-  return mainContent.set(await visService.fetchContent());
+  var result = await visService.fetchContent();
+  return mainContent.set(result);
 };
 
 export const loadData = async (live) => {
   let val;
   try {
     val = await cdService.fetchContent(live);
-    console.log("val : ", val);
+    console.log('val : ', val);
     return val;
   } catch (e) {
     try {
@@ -62,11 +62,11 @@ const update = async () => {
 
   clearAll.forEach((item) => item());
   clearAll = [];
-/*
+  /*
   if (s === 'Live') {
     mainContent.set(await loadData(true));
   }  else */
-   if (s === 'Realtime') {
+  if (s === 'Realtime') {
     visData();
   }
 };
@@ -77,4 +77,3 @@ depth.subscribe(update);
 hub.subscribe(update);
 format.subscribe(update);
 base.subscribe(update);
-compare.subscribe(update);

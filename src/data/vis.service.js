@@ -19,7 +19,7 @@ class VisService {
         depth: get(depth),
         allowInvalid: true,
       });
-      console.log("fetchContent : ",content);
+      console.log('fetchContent : ', content);
       this.lastSuccess = content;
     } catch (e) {
       content = this.lastSuccess || {};
@@ -31,7 +31,7 @@ class VisService {
         },
       });
     }
-    console.log("fetchContent2   : ",content);
+    console.log('fetchContent2   : ', content);
     return content;
   }
 
@@ -40,7 +40,7 @@ class VisService {
   }
 
   listenForSave(method) {
-    console.log("listenForSave : ",method);
+    console.log('listenForSave : ', method);
     return this.sdk.form.saved(
       (c) => {
         this.lastSuccess = c;
@@ -54,7 +54,7 @@ class VisService {
   }
 
   listenForLocaleChange(method) {
-    console.log("listenForLocaleChange : ",method);
+    console.log('listenForLocaleChange : ', method);
     return this.sdk.locale.changed(method);
   }
 
@@ -63,7 +63,7 @@ class VisService {
   }
 
   listenForSettingsChanges(method) {
-    console.log("listenForSettingsChanges : ",method);
+    console.log('listenForSettingsChanges : ', method);
     return this.sdk.settings.changed(method);
   }
 
@@ -72,12 +72,12 @@ class VisService {
   }
 
   listenForLocaleChanges(method) {
-    console.log("listenForLocaleChanges 2 : ",method);
+    console.log('listenForLocaleChanges 2 : ', method);
     return this.sdk.locale.changed(method);
   }
 
   listenForChanges(method) {
-    console.log("listenForChanges 2 : ",method);
+    console.log('listenForChanges 2 : ', method);
     return this.sdk.form.changed(
       (c) => {
         this.lastSuccess = c;
@@ -96,9 +96,11 @@ class VisService {
       timeout.set(true);
     }, 5000);
     try {
-      const sdk = await init();
+      const sdk = await init({
+        debug: true,
+      });
       this.sdk = sdk;
-      console.log("connect : sdk : ",sdk)
+      console.log('connect : sdk : ', sdk);
       connected.set(true);
       clearTimeout(t);
       return true;
